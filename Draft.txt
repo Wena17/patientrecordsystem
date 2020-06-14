@@ -1,0 +1,9 @@
+Patients Records
+Admin
+*Search
+*Edit
+*Delete
+User1(Person Under Investigation/PUI)
+*Form to send details everyday
+User2(Person Under Monitoring/PUM)
+*Form to send details everyday
