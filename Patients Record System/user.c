@@ -94,26 +94,26 @@ int save_users()
     return -1;
 }
 
-User *add_user(const char *code)
+User *add_user()
 {
     User *u = malloc(sizeof(User));
     u->id = ++users_max_id; // Assign the next id, increment *before* assignment.
-    strcpy(u->code, code);
+    strcpy(u->code, 'PR');
     users = list_append(users, u);
-//    FILE *f = fopen(filename, "a+");
-//    if (f == NULL)
-//    {
-//        fprintf(stderr, "%s:%d Could not open file.\n", __FUNCTION__, __LINE__); // Print a nice error message with function name and line number.
-//        return NULL;
-//    }
-//    int written = fprintf(f, "%d,%s,%s,%s,%d,%d,%s,%s,%s\n", u->id, u->user_name, u->email, u->pw_hash, u->is_admin, u->is_seller, u->full_name, u->address, u->phone);
-//    if (written < 0 || written >= BUF_SIZE)
-//    {
-//        fclose(f); // We don't want dangling open files in case of an error.
-//        fprintf(stderr, "%s:%d Could not write file.\n", __FUNCTION__, __LINE__);
-//        return NULL;
-//    }
-//    fclose(f); // We're done here.
+    FILE *f = fopen(filename, "a+");
+    if (f == NULL)
+    {
+        fprintf(stderr, "%s:%d Could not open file.\n", __FUNCTION__, __LINE__); // Print a nice error message with function name and line number.
+        return NULL;
+    }
+    int written = fprintf(f, "%s,%s,%d,%s,%s,%s,%d.%d.%d,%s,%d,%s,%s,%s\n", u->id, u->code, u->name, u->age, u->gender, u->nationality, u->phone, u->mm, u->dd, u->yy, u->address, u->h_num, u->health_con, u->travel, u->expo);
+    if (written < 0 || written >= BUF_SIZE)
+    {
+        fclose(f); // We don't want dangling open files in case of an error.
+        fprintf(stderr, "%s:%d Could not write file.\n", __FUNCTION__, __LINE__);
+        return NULL;
+    }
+    fclose(f); // We're done here.
     return u;
 }
 

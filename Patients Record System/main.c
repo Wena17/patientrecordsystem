@@ -6,6 +6,7 @@
 #include "curses.h"
 #include "ui.h"
 #include "user.h"
+#include "AddingPatient.h"
 
 #define ADMIN_PW "BigSecret!"
 
@@ -14,6 +15,8 @@ void welcomeMessage();
 void homePage();
 bool admin_login();
 void admin_screen();
+void PUM_menu();
+void PUI_menu();
 
 int main()
 {
@@ -30,17 +33,29 @@ int main()
 
 void welcomeMessage()
 {
-    headMessage("Welcome");
+   headMessage("Welcome");
     /* This can be optimized to use screen coordinates. */
-    move(9, 0);
-    printw("\n\n\n\t\tWELCOME\n\t\t\tTO\n\t\tPATIENTS RECORD");
-    printw("\n\n\n\n\t\t\t\t\tPress any key to continue.....");
+    move(11, 0);
+    printw("\n\t\t\t\t\t     °°                       °°");
+    printw("\n\t\t\t\t\t    °  °                     °  °");
+    printw("\n\t\t\t\t\t     °°                       °°");
+    printw("\n\t\t\t\t\t    ||        WELCOME          ||  ");
+    printw("\n\t\t\t\t\t   ||            TO             ||  ");
+    printw("\n\t\t\t\t\t  ||      PATIENT'S RECORD       ||  ");
+    printw("\n\t\t\t\t\t   ||         SYSTEM            ||  ");
+    printw("\n\t\t\t\t\t    ||                         ||  ");
+    printw("\n\t\t\t\t\t     í|||||||||°°°°°°||||||||||í  ");
+    printw("\n\t\t\t\t\t              °°    °°");
+    printw("\n\t\t\t\t\t               °°°°°°");
+    printw("\n\t\t\t\t\t  °              íí");
+    printw("\n\t\t\t\t\t ° °**_**_**_**_íí");
+    printw("\n\t\t\t\t\t  °");
+    printw("\n\n\t\t\t\t\tPress any key to continue.....");
     refresh();
     getch();
     clear();
     refresh();
 }
-
 void homePage()
 {
     headMessage("HOMEPAGE");
@@ -57,10 +72,10 @@ void homePage()
             }
             break;
         case 1:
-            //TODO
+            PUM_menu();
             break;
         case 2:
-            //TODO
+            PUI_menu();
             break;
         case 3:
             exit(0);
@@ -78,6 +93,7 @@ bool admin_login()
     bool success = false;
     WINDOW *win = newwin(height, width, (LINES - height) / 2, (COLS - width) / 2);
     wclear(win);
+    wborder(win, 0, 0, 0, 0, 0, 0,0,0);
     mvwprintw(win, 3, 2, "Password: ");
     wrefresh(win);
     while (!success)
@@ -110,5 +126,66 @@ bool admin_login()
 
 void admin_screen()
 {
-// TODO
+    headMessage("ADMIN SCREEN");
+    const char *m[] = { "Add Patient", "View Records", "Change Admin Details",  "Exit", NULL }; // The NULL pointer marks the end of the list.
+    bool is_running = true;
+    while (is_running)
+    {
+        switch (menu(m))
+        {
+        case 0:
+            //TODO
+            break;
+        case 1:
+            //TODO
+            break;
+        case 2:
+            //TODO
+            break;
+        case 3:
+            exit(0);
+        }
+    }
+}
+
+void PUM_menu()
+{
+    headMessage("Person Under Monitoring Menu");
+    const char *m[] = { "New Patient", "Current Patient", "Exit", NULL }; // The NULL pointer marks the end of the list.
+    bool is_running = true;
+    while (is_running)
+    {
+        switch (menu(m))
+        {
+        case 0:
+            new_patient(*u);
+            break;
+        case 1:
+            //TODO
+            break;
+        case 2:
+            exit(0);
+        }
+    }
+}
+
+void PUI_menu()
+{
+    headMessage("Person Under Monitoring Menu");
+    const char *m[] = { "New Patient", "Current Patient", "Exit", NULL }; // The NULL pointer marks the end of the list.
+    bool is_running = true;
+    while (is_running)
+    {
+        switch (menu(m))
+        {
+        case 0:
+            //TODO
+            break;
+        case 1:
+            //TODO;
+            break;
+        case 2:
+            exit(0);
+        }
+    }
 }

@@ -16,7 +16,7 @@ int menu(const char **items)
     /* Determine the length of the longest menu item. */
     int num_items = 0;
     int max_width = 0;
-    while (items[num_items] != NULL)
+    while (items[num_items])
     {
         int l = strlen(items[num_items]);
         if (l > max_width)
@@ -71,18 +71,20 @@ void show_message(char *msg)
 void headMessage(const char *message)
 {
     refresh();
-    const int len = strlen("°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°");
+    const int len = strlen("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
     const int col = (COLS - len) / 2; // Calculate the column to center the string.
-    WINDOW *win = newwin(9, len, 0, col);
+    WINDOW *win = newwin(10, len, 0, col);
     wclear(win);
-    mvwprintw(win, 0, 0, "°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°");
-    mvwprintw(win, 1, 0, "°                                                    °");
-    mvwprintw(win, 2, 0, "°                  PATIENTS RECORDS                  °");
-    mvwprintw(win, 3, 0, "°                                                    °");
-    mvwprintw(win, 4, 0, "°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°");
-    mvwprintw(win, 6, 0, "*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=");
-    mvwprintw(win, 7, (len - strlen(message)) / 2, "%s", message);
-    mvwprintw(win, 8, 0, "*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=");
+    mvwprintw(win, 0, 0, "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    mvwprintw(win, 1, 0, "í~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~í");
+    mvwprintw(win, 2, 0, "!!                                                  !!");
+    mvwprintw(win, 3, 0, "!!                PATIENT'S RECORDS                 !!");
+    mvwprintw(win, 4, 0, "!!                                                  !!");
+    mvwprintw(win, 5, 0, "í~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~í");
+    mvwprintw(win, 6, 0, "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    mvwprintw(win, 7, 0, "*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=");
+    mvwprintw(win, 8, (len - strlen(message)) / 2, "%s", message);
+    mvwprintw(win, 9, 0, "*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=");
     wrefresh(win);
     delwin(win);
 }

@@ -12,13 +12,26 @@ typedef struct User
 {
     unsigned int id;
     char code[CODE_LEN + 1];
+    char name[MAXLEN];
+    int age;
+    char gender[CODE_LEN];
+    char nationality[MAXLEN];
+    char phone[MAXLEN];
+    int mm;
+    int dd;
+    int yy;
+    char address[MAXLEN];
+    int h_num;
+    char health_con[MAXLEN];
+    char travel[CODE_LEN];
+    char expo[CODE_LEN];
 } User;
 
 int load_users();
 int save_users();
 
 LinkedList *get_users();
-User *add_user(const char *code);
+User *add_user();
 User *get_user(const int id);
 void delete_user(User *user);
 int get_user_count();
