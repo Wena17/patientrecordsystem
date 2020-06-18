@@ -59,7 +59,7 @@ void welcomeMessage()
 void homePage()
 {
     headMessage("HOMEPAGE");
-    const char *m[] = { "Admin", "Person Under Monitoring", "Person Under Investegation", "Exit", NULL }; // The NULL pointer marks the end of the list.
+    const char *m[] = { "Admin", "New Patient", "Person Under Monitoring", "Person Under Investegation", "Exit", NULL }; // The NULL pointer marks the end of the list.
     bool is_running = true;
     while (is_running)
     {
@@ -72,14 +72,17 @@ void homePage()
             }
             break;
         case 1:
-            // HERE, you should insert a enter_code function: "User *u = enter_code();"
-            PUM_menu(); // and HERE you should pass the user as a parameter: PUM_menu(u);
+            new_patient();
             break;
         case 2:
-            // same HERE
-            PUI_menu();
+            // HERE, you should insert a enter_code function: "User *u = enter_code();"
+             // and HERE you should pass the user as a parameter: PUM_menu(u);
             break;
         case 3:
+            // same HERE
+
+            break;
+        case 4:
             exit(0);
         }
     }
@@ -129,7 +132,7 @@ bool admin_login()
 void admin_screen()
 {
     headMessage("ADMIN SCREEN");
-    const char *m[] = { "New Patient", "View Records", "Change Admin Details",  "Exit", NULL }; // The NULL pointer marks the end of the list.
+    const char *m[] = {"View Records", "Change Admin Details",  "Exit", NULL }; // The NULL pointer marks the end of the list.
     bool is_running = true;
     while (is_running)
     {
@@ -142,54 +145,51 @@ void admin_screen()
             //TODO
             break;
         case 2:
-            //TODO
-            break;
-        case 3:
-            exit(0);
-        }
-    }
-}
-
-void PUM_menu() // HERE should have the user as parameter
-{
-    headMessage("Person Under Monitoring Menu");
-    // HERE Do you need this menu? A new patient will be created in the admin menu, right. So the menu will always be an existing patent.
-    // HERE Instead, there should be the screen to enter the actual data for the day, I think.
-    const char *m[] = { "New Patient", "Current Patient", "Exit", NULL }; // The NULL pointer marks the end of the list.
-    bool is_running = true;
-    while (is_running)
-    {
-        switch (menu(m))
-        {
-        case 0:
-            new_patient(*u); // HERE u is nowhere declared; but see my comment further up.
-            break;
-        case 1:
-            //TODO
-            break;
-        case 2:
             return;
         }
     }
 }
 
-void PUI_menu()
-{
-    headMessage("Person Under Monitoring Menu");
-    const char *m[] = { "New Patient", "Current Patient", "Exit", NULL }; // The NULL pointer marks the end of the list.
-    bool is_running = true;
-    while (is_running) // HERE you can simple write "while (true)".
-    {
-        switch (menu(m))
-        {
-        case 0:
-            //TODO
-            break;
-        case 1:
-            //TODO;
-            break;
-        case 2:
-            return;
-        }
-    }
-}
+//void PUM_menu() // HERE should have the user as parameter
+//{
+//    headMessage("Person Under Monitoring Menu");
+//    // HERE Do you need this menu? A new patient will be created in the admin menu, right. So the menu will always be an existing patent.
+//    // HERE Instead, there should be the screen to enter the actual data for the day, I think.
+//    const char *m[] = { "New Patient", "Current Patient", "Exit", NULL }; // The NULL pointer marks the end of the list.
+//    bool is_running = true;
+//    while (is_running)
+//    {
+//        switch (menu(m))
+//        {
+//        case 0:
+//            new_patient(*u); // HERE u is nowhere declared; but see my comment further up.
+//            break;
+//        case 1:
+//            //TODO
+//            break;
+//        case 2:
+//            return;
+//        }
+//    }
+//}
+//
+//void PUI_menu()
+//{
+//    headMessage("Person Under Monitoring Menu");
+//    const char *m[] = { "New Patient", "Current Patient", "Exit", NULL }; // The NULL pointer marks the end of the list.
+//    bool is_running = true;
+//    while (is_running) // HERE you can simple write "while (true)".
+//    {
+//        switch (menu(m))
+//        {
+//        case 0:
+//            //TODO
+//            break;
+//        case 1:
+//            //TODO;
+//            break;
+//        case 2:
+//            return;
+//        }
+//    }
+//}

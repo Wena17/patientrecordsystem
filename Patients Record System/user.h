@@ -8,7 +8,7 @@
 #define MAXLEN 256
 #define CODE_LEN 8
 
-typedef struct User
+typedef struct s_user
 {
     unsigned int id;
     char code[CODE_LEN + 1];

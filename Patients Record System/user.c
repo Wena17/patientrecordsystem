@@ -94,11 +94,10 @@ int save_users()
     return -1;
 }
 
-User *add_user()
+User *add_user(User *u)
 {
-    User *u = malloc(sizeof(User));
     u->id = ++users_max_id; // Assign the next id, increment *before* assignment.
-    strcpy(u->code, 'PR');
+    strcpy(u->code, "PR");
     users = list_append(users, u);
     FILE *f = fopen(filename, "a+");
     if (f == NULL)
@@ -106,7 +105,22 @@ User *add_user()
         fprintf(stderr, "%s:%d Could not open file.\n", __FUNCTION__, __LINE__); // Print a nice error message with function name and line number.
         return NULL;
     }
-    int written = fprintf(f, "%s,%s,%d,%s,%s,%s,%d.%d.%d,%s,%d,%s,%s,%s\n", u->id, u->code, u->name, u->age, u->gender, u->nationality, u->phone, u->mm, u->dd, u->yy, u->address, u->h_num, u->health_con, u->travel, u->expo);
+    int written = fprintf(f, "%d,%s,%s,%d,%s,%s,%s,%d.%d.%d,%s,%d,%s,%s,%s\n",
+                          u->id,
+                          u->code,
+                          u->name,
+                          u->age,
+                          u->gender,
+                          u->nationality,
+                          u->phone,
+                          u->mm,
+                          u->dd,
+                          u->yy,
+                          u->address,
+                          u->h_num,
+                          u->health_con,
+                          u->travel,
+                          u->expo);
     if (written < 0 || written >= BUF_SIZE)
     {
         fclose(f); // We don't want dangling open files in case of an error.

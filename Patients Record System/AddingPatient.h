@@ -1,7 +1,7 @@
 #ifndef ADDINGPATIENT_H_INCLUDED
 #define ADDINGPATIENT_H_INCLUDED
 
-void new_patient(User *u);
+void new_patient();
 
 
 #endif // ADDINGPATIENT_H_INCLUDED
