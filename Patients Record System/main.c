@@ -129,7 +129,7 @@ bool admin_login()
 void admin_screen()
 {
     headMessage("ADMIN SCREEN");
-    const char *m[] = { "Add Patient", "View Records", "Change Admin Details",  "Exit", NULL }; // The NULL pointer marks the end of the list.
+    const char *m[] = { "New Patient", "View Records", "Change Admin Details",  "Exit", NULL }; // The NULL pointer marks the end of the list.
     bool is_running = true;
     while (is_running)
     {
@@ -168,7 +168,7 @@ void PUM_menu() // HERE should have the user as parameter
             //TODO
             break;
         case 2:
-            exit(0); // HERE you should just set "is_running" to false. Or you could just do "return;" Exit ends the program, you don't want that.
+            return;
         }
     }
 }
@@ -189,7 +189,7 @@ void PUI_menu()
             //TODO;
             break;
         case 2:
-            exit(0); // HERE exit ends the whole program. Just do a return.
+            return;
         }
     }
 }
