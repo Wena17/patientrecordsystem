@@ -72,9 +72,11 @@ void homePage()
             }
             break;
         case 1:
-            PUM_menu();
+            // HERE, you should insert a enter_code function: "User *u = enter_code();"
+            PUM_menu(); // and HERE you should pass the user as a parameter: PUM_menu(u);
             break;
         case 2:
+            // same HERE
             PUI_menu();
             break;
         case 3:
@@ -148,9 +150,11 @@ void admin_screen()
     }
 }
 
-void PUM_menu()
+void PUM_menu() // HERE should have the user as parameter
 {
     headMessage("Person Under Monitoring Menu");
+    // HERE Do you need this menu? A new patient will be created in the admin menu, right. So the menu will always be an existing patent.
+    // HERE Instead, there should be the screen to enter the actual data for the day, I think.
     const char *m[] = { "New Patient", "Current Patient", "Exit", NULL }; // The NULL pointer marks the end of the list.
     bool is_running = true;
     while (is_running)
@@ -158,13 +162,13 @@ void PUM_menu()
         switch (menu(m))
         {
         case 0:
-            new_patient(*u);
+            new_patient(*u); // HERE u is nowhere declared; but see my comment further up.
             break;
         case 1:
             //TODO
             break;
         case 2:
-            exit(0);
+            exit(0); // HERE you should just set "is_running" to false. Or you could just do "return;" Exit ends the program, you don't want that.
         }
     }
 }
@@ -174,7 +178,7 @@ void PUI_menu()
     headMessage("Person Under Monitoring Menu");
     const char *m[] = { "New Patient", "Current Patient", "Exit", NULL }; // The NULL pointer marks the end of the list.
     bool is_running = true;
-    while (is_running)
+    while (is_running) // HERE you can simple write "while (true)".
     {
         switch (menu(m))
         {
@@ -185,7 +189,7 @@ void PUI_menu()
             //TODO;
             break;
         case 2:
-            exit(0);
+            exit(0); // HERE exit ends the whole program. Just do a return.
         }
     }
 }
