@@ -2,6 +2,7 @@
 #define USER_H_INCLUDED
 
 #include <stdlib.h>
+#include <time.h>
 
 #include "linkedlist.h"
 
