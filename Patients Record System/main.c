@@ -23,6 +23,7 @@ int main()
     int cursor_setting = curs_set(0);
     noecho(); // Typed characters are not automatically printed on the screen.
     welcomeMessage();
+    load_users();
     homePage();
     curs_set(cursor_setting); // Back to normal.
     echo(); // Back to normal.

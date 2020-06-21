@@ -10,58 +10,60 @@
 
 #define BUF_SIZE 2048
 
-LinkedList *users; // This is where we will keep the users.
+LinkedList *users = NULL; // This is where we will keep the users.
 int users_max_id = 0; // We keep track of the highest ID so we know which one to use next.
 
 /* Loads all users from the file and returns the number of users read, or -1 if there was an error. */
 int load_users()
 {
+    if (users) return -1; // Users already loaded.
     FILE *f = fopen(filename, "r");
     if (f == NULL) // Could not open the file.
     {
         return -1;
     }
-//    char buf[BUF_SIZE]; // We'll use this variable to load lines of our file into. C is not very convenient when it comes to strings, you have to do a lot of stuff by hand.
-//    User *previous = NULL; // We keep track of the previous user we've read so we can set its "next" pointer later. This will become clearer further down.
-//    int count = 0; // Let's count the users.
-//    users_max_id = 0; // To keep track of the highest id, we reset it first.
-//    while (true) // Endless loop.
-//    {
-//        if (fgets(buf, BUF_SIZE, f) == NULL) //  We read the next line from the file into our buf variable. If we get NULL, we've reached the end of the file.
-//            break; // ... so exit the loop.
-//        User *u = malloc(sizeof(User)); // Allocate memory for one user.
-//        strcpy(u->full_name, "");
-//        strcpy(u->address, "");
-//        strcpy(u->phone, "");
-//        u->next = NULL; // Initialize link in case this is the last one.
-//        int rc = sscanf(buf, "%d,%255[^,\n],%255[^,\n],%255[^,\n],%d,%d,%255[^,\n],%255[^,\n],%255[^,\n]",
-//                        &u->id,
-//                        u->user_name,
-//                        u->email,
-//                        u->pw_hash,
-//                        (int *) &u->is_admin,
-//                        (int *) &u->is_seller,
-//                        u->full_name,
-//                        u->address,
-//                        u->phone);
-//        if (rc < 6) // The number of fields read is in rc. This should be 5 unless it's somehow an invalid line. If it's invalid, simply skip it.
-//        {
-//            free(u); // Free the allocated memory because we're skipping, so we don't run out of memory eventually. It's the opposite of malloc.
-//            fprintf(stderr, "Skipping invalid line.\n"); // Be nice and print a notice.
-//            continue; // Loop around.
-//        }
-//        // fprintf(stderr, "Read user %d: %s\n", u->id, u->user_name);
-//        /* At this point, we've read the fields of one line into the User in variable u. */
-//        if (previous == NULL) // This means we just read the first user.
-//            users = u; // So remember the start of the list in our global variable. Otherwise we'll never find it again.
-//        else // If it's not the first user...
-//            previous->next = u; // ... then this is the next of the previous. Does your
-//        count++; // We've read one more user. Increase the count of users by one.
-//        if (u->id > users_max_id) // If we found a higher id ...
-//            users_max_id = u->id; // ... then remember it. This is only necessary if we delete users later and the numbers are not strictly ascending anymore. But hey, let's be safe.
-//        previous = u; // And now the current one becomes the previous one before we loop around. Yay, we're done with one user.
-//    }
-//    fclose(f); // We're done here. File is read completely. We get here only through the break statement further up.
+    char buf[BUF_SIZE]; // We'll use this variable to load lines of our file into. C is not very convenient when it comes to strings, you have to do a lot of stuff by hand.
+    int count = 0; // Let's count the users.
+    users_max_id = 0; // To keep track of the highest id, we reset it first.
+    while (true) // Endless loop.
+    {
+        if (fgets(buf, BUF_SIZE, f) == NULL) //  We read the next line from the file into our buf variable. If we get NULL, we've reached the end of the file.
+            break; // ... so exit the loop.
+        User *u = malloc(sizeof(User)); // Allocate memory for one user.
+        char travel[BUF_SIZE];
+        char expo[BUF_SIZE];
+        int rc = sscanf(buf, "%d,%255[^,\n],%255[^,\n],%d,%255[^,\n],%255[^,\n],%255[^,\n],%d,%d,%d,%255[^,\n],%d,%255[^,\n],%255[^,\n],%255[^,\n]",
+                        &u->id,
+                        u->code,
+                        u->name,
+                        &u->age,
+                        u->gender,
+                        u->nationality,
+                        u->phone,
+                        &u->mm,
+                        &u->dd,
+                        &u->yy,
+                        u->address,
+                        &u->h_num,
+                        u->health_con,
+                        travel,
+                        expo);
+        if (rc < 6) // The number of fields read is in rc. This should be 5 unless it's somehow an invalid line. If it's invalid, simply skip it.
+        {
+            free(u); // Free the allocated memory because we're skipping, so we don't run out of memory eventually. It's the opposite of malloc.
+            fprintf(stderr, "Skipping invalid line.\n"); // Be nice and print a notice.
+            continue; // Loop around.
+        }
+        u->travel = (strcmp(travel, "Yes") == 0);
+        u->expo = (strcmp(expo, "Yes") == 0);
+        // fprintf(stderr, "Read user %d: %s\n", u->id, u->user_name);
+        /* At this point, we've read the fields of one line into the User in variable u. */
+        users = list_append(users, u);
+        count++; // We've read one more user. Increase the count of users by one.
+        if (u->id > users_max_id) // If we found a higher id ...
+            users_max_id = u->id; // ... then remember it. This is only necessary if we delete users later and the numbers are not strictly ascending anymore. But hey, let's be safe.
+    }
+    fclose(f); // We're done here. File is read completely. We get here only through the break statement further up.
     return 0; // Return the number of users, just to be nice.
 }
 
