@@ -65,42 +65,53 @@ int load_users()
     return 0; // Return the number of users, just to be nice.
 }
 
-/* Save all users in the file and return the number of users, or -1 if something went wrong.
- * This is actually a bit bad because when the writing fails, all data would be lost. Don't worry for now but in a real program this would have to be handled better. */
+/* Save all users in the file and return 0 if everything worked, -1 if we couldn't open the file, and -2 if something else went wrong. */
+// TODO Do a save and rename.
 int save_users()
 {
-//    FILE *f = fopen(filename, "w+");
-//    if (f == NULL)
-//    {
-//        fprintf(stderr, "%s:%d Could not open file.\n", __FUNCTION__, __LINE__); // Print a nice error message with function name and line number.
-//        return -1;
-//    }
-//    User *u = users; // We start with the head of the list.
-//    int count = 0; // Let's count the users.
-//    while (u != NULL) // while we have more, we loop.
-//    {
-//        int written = fprintf(f, "%d,%s,%s,%s,%d,%d,%s,%s,%s\n", u->id, u->user_name, u->email, u->pw_hash, u->is_admin, u->is_seller, u->full_name, u->address, u->phone);
-//        if (written < 0 || written >= BUF_SIZE)
-//        {
-//            fclose(f); // We don't want dangling open files in case of an error.
-//            fprintf(stderr, "%s:%d Could not write file. User ID %d\n", __FUNCTION__, __LINE__, u->id);
-//            return -1;
-//        }
-//        fprintf(stderr, "Wrote user %d: %s\n", u->id, u->user_name);
-//        count++;
-//        u = u->next;
-//    }
-//    fclose(f); // We're done here.
-    return -1;
+    FILE *f = fopen(filename, "w+");
+    if (f == NULL)
+    {
+        fprintf(stderr, "%s:%d Could not open file.\n", __FUNCTION__, __LINE__); // Print a nice error message with function name and line number.
+        return -1;
+    }
+    LinkedList *link = users;
+    while (link)
+    {
+        User *u = (User *) link->elem;
+        int written = fprintf(f, "%d,%s,%s,%d,%s,%s,%s,%d/%d/%d,%s,%d,%s,%s,%s\n",
+                              u->id,
+                              u->code,
+                              u->name,
+                              u->age,
+                              u->gender,
+                              u->nationality,
+                              u->phone,
+                              u->mm,
+                              u->dd,
+                              u->yy,
+                              u->address,
+                              u->h_num,
+                              u->health_con,
+                              u->travel ? "Yes" : "No",
+                              u->expo ? "Yes" : "No");
+        if (written < 0 || written >= BUF_SIZE)
+        {
+            fclose(f); // We don't want dangling open files in case of an error.
+            fprintf(stderr, "%s:%d Could not write file.\n", __FUNCTION__, __LINE__);
+            return -2;
+        }
+        link = link->next;
+    }
+    fclose(f); // We're done here.
+    return 0;
 }
 
 User *add_user(User *u)
 {
     ++users_max_id; //increment *before* assignment.
     u->id = users_max_id; // Assign the next id.
-    strupr(u->travel);
-    strupr(u->expo);
-    if(strcmp(u->travel, "YES") == 0 || strcmp(u->expo, "YES") == 0)
+    if(u->travel || u->expo)
     {
         sprintf(u->code, "PUI%05d", users_max_id);
     }
@@ -109,35 +120,7 @@ User *add_user(User *u)
         sprintf(u->code, "PUM%05d", users_max_id);
     }
     users = list_append(users, u);
-    FILE *f = fopen(filename, "a+");
-    if (f == NULL)
-    {
-        fprintf(stderr, "%s:%d Could not open file.\n", __FUNCTION__, __LINE__); // Print a nice error message with function name and line number.
-        return NULL;
-    }
-    int written = fprintf(f, "%d,%s,%s,%d,%s,%s,%s,%d.%d.%d,%s,%d,%s,%s,%s\n",
-                          u->id,
-                          u->code,
-                          u->name,
-                          u->age,
-                          u->gender,
-                          u->nationality,
-                          u->phone,
-                          u->mm,
-                          u->dd,
-                          u->yy,
-                          u->address,
-                          u->h_num,
-                          u->health_con,
-                          u->travel,
-                          u->expo);
-    if (written < 0 || written >= BUF_SIZE)
-    {
-        fclose(f); // We don't want dangling open files in case of an error.
-        fprintf(stderr, "%s:%d Could not write file.\n", __FUNCTION__, __LINE__);
-        return NULL;
-    }
-    fclose(f); // We're done here.
+    save_users();
     return u;
 }
 

@@ -3,6 +3,7 @@
 
 #include <stdlib.h>
 #include <time.h>
+#include <stdbool.h>
 
 #include "linkedlist.h"
 
@@ -24,8 +25,8 @@ typedef struct s_user
     char address[MAXLEN];
     int h_num;
     char health_con[MAXLEN];
-    char travel[CODE_LEN];
-    char expo[CODE_LEN];
+    bool travel;
+    bool expo;
     LinkedList *reports;
 } User;
 
