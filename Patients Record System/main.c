@@ -15,8 +15,7 @@ void welcomeMessage();
 void homePage();
 bool admin_login();
 void admin_screen();
-void PUM_menu();
-void PUI_menu();
+User *patient_login();
 
 int main()
 {
@@ -59,8 +58,9 @@ void welcomeMessage()
 void homePage()
 {
     headMessage("HOMEPAGE");
-    const char *m[] = { "Admin", "New Patient", "Person Under Monitoring", "Person Under Investegation", "Exit", NULL }; // The NULL pointer marks the end of the list.
+    const char *m[] = { "Admin", "New Patient", "Person Under Monitoring", "Person Under Investigation", "Exit", NULL }; // The NULL pointer marks the end of the list.
     bool is_running = true;
+    User *u = NULL;
     while (is_running)
     {
         switch (menu(m))
@@ -75,12 +75,14 @@ void homePage()
             new_patient();
             break;
         case 2:
-            // HERE, you should insert a enter_code function: "User *u = enter_code();"
-             // and HERE you should pass the user as a parameter: PUM_menu(u);
+            u = patient_login();
+            if (u != NULL) {
+                PUM_screen(u);
+            }
+            // TODO warning if code was entered wrong and no patient was found.
             break;
         case 3:
-            // same HERE
-
+            //TODO
             break;
         case 4:
             exit(0);
@@ -132,7 +134,7 @@ bool admin_login()
 void admin_screen()
 {
     headMessage("ADMIN SCREEN");
-    const char *m[] = {"View Records", "Change Admin Details",  "Exit", NULL }; // The NULL pointer marks the end of the list.
+    const char *m[] = {"Patients Under Monitoring", "Patients Under Investigation", "Change Admin Details",  "Exit", NULL }; // The NULL pointer marks the end of the list.
     bool is_running = true;
     while (is_running)
     {
@@ -145,51 +147,58 @@ void admin_screen()
             //TODO
             break;
         case 2:
+            //TODO
+            break;
+        case 3:
             return;
         }
     }
 }
 
-//void PUM_menu() // HERE should have the user as parameter
-//{
-//    headMessage("Person Under Monitoring Menu");
-//    // HERE Do you need this menu? A new patient will be created in the admin menu, right. So the menu will always be an existing patent.
-//    // HERE Instead, there should be the screen to enter the actual data for the day, I think.
-//    const char *m[] = { "New Patient", "Current Patient", "Exit", NULL }; // The NULL pointer marks the end of the list.
-//    bool is_running = true;
-//    while (is_running)
-//    {
-//        switch (menu(m))
-//        {
-//        case 0:
-//            new_patient(*u); // HERE u is nowhere declared; but see my comment further up.
-//            break;
-//        case 1:
-//            //TODO
-//            break;
-//        case 2:
-//            return;
-//        }
-//    }
-//}
-//
-//void PUI_menu()
-//{
-//    headMessage("Person Under Monitoring Menu");
-//    const char *m[] = { "New Patient", "Current Patient", "Exit", NULL }; // The NULL pointer marks the end of the list.
-//    bool is_running = true;
-//    while (is_running) // HERE you can simple write "while (true)".
-//    {
-//        switch (menu(m))
-//        {
-//        case 0:
-//            //TODO
-//            break;
-//        case 1:
-//            //TODO;
-//            break;
-//        case 2:
-//            return;
-//        }
-//    }
-//}
+User *patient_login()
+{
+    headMessage("PATIENT LOGIN");
+    char code[20];
+    int width = COLS / 2;
+    int height = 7;
+    int i = 0;
+    bool success = false;
+    WINDOW *win = newwin(height, width, (LINES - height) / 2, (COLS - width) / 2);
+    wclear(win);
+    wborder(win, 0, 0, 0, 0, 0, 0,0,0);
+    mvwprintw(win, 3, 2, "Enter code: ");
+    wrefresh(win);
+    User *u;
+    while (!success)
+    {
+        curs_set(1);
+        echo();
+        mvwscanw(win, 3, 15, "%10s", &code);
+        curs_set(0);
+        u = get_user_by_code(code);
+        if (u == NULL)
+        {
+            wmove(win, 3, 15);
+            wclrtoeol(win);
+            wrefresh(win);
+            show_message("Wrong code!");
+            i++;
+            if (i >= 3)
+            {
+                show_message("You've reached the times to login.");
+                break;
+            }
+        }
+        else
+        {
+            success = true;
+        }
+    }
+    echo();
+    wclear(win);
+    wrefresh(win);
+    delwin(win);
+    return u;
+}
+
+

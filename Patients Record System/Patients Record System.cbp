@@ -31,6 +31,10 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="AddingPatient.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="AddingPatient.h" />
 		<Unit filename="curses.h">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>

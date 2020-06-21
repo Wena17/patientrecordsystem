@@ -96,8 +96,18 @@ int save_users()
 
 User *add_user(User *u)
 {
-    u->id = ++users_max_id; // Assign the next id, increment *before* assignment.
-    strcpy(u->code, "PR");
+    ++users_max_id; //increment *before* assignment.
+    u->id = users_max_id; // Assign the next id.
+    strupr(u->travel);
+    strupr(u->expo);
+    if(strcmp(u->travel, "YES") == 0 || strcmp(u->expo, "YES") == 0)
+    {
+        sprintf(u->code, "PUI%05d", users_max_id);
+    }
+    else
+    {
+        sprintf(u->code, "PUM%05d", users_max_id);
+    }
     users = list_append(users, u);
     FILE *f = fopen(filename, "a+");
     if (f == NULL)
@@ -138,7 +148,21 @@ User *get_user(const int id)
     {
         User *u = (User *) current->elem;
         if (u->id == id)
-            return current->elem;
+            return u;
+        else
+            current = current->next;
+    }
+    return NULL;
+}
+
+User *get_user_by_code(const char *code)
+{
+    LinkedList *current = users;
+    while (current != NULL)
+    {
+        User *u = (User *) current->elem;
+        if (strcmp(u->code, code) == 0)
+            return u;
         else
             current = current->next;
     }

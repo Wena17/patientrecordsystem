@@ -26,6 +26,7 @@ typedef struct s_user
     char health_con[MAXLEN];
     char travel[CODE_LEN];
     char expo[CODE_LEN];
+    LinkedList *reports;
 } User;
 
 int load_users();
@@ -34,6 +35,7 @@ int save_users();
 LinkedList *get_users();
 User *add_user();
 User *get_user(const int id);
+User *get_user_by_code(const char *code);
 void delete_user(User *user);
 int get_user_count();
 
