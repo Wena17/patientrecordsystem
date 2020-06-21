@@ -48,11 +48,13 @@ int menu(const char **items)
     }
     wrefresh(win);
     int choice;
+    cbreak();
     do
     {
         choice = getch() - '1'; // Neat way to translate the character to the zero-based index of the item.
     }
     while (choice < 0 || choice >= num_items);
+    nocbreak();
     wclear(win); // Clear the window.
     wrefresh(win); // Display the changes.
     delwin(win); // Free up the window memory.
@@ -135,7 +137,7 @@ void PUM_screen(User *current_patient)
     s->vomit = get_yes_no(win, 12, 28);
     s->diarrhea = get_yes_no(win, 13, 28);
     s->other = get_yes_no(win, 14, 28);
-    if (add_report(current_patient, s)) // Add report and check if something went wrong.
+    if (add_report(current_patient, s, true)) // Add report and check if something went wrong.
     {
         free(s);
         show_message("Something went wrong. Press any key to continue.");

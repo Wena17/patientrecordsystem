@@ -26,6 +26,10 @@ typedef struct s_report
     User *patient;
 } Report;
 
-int add_report(User *u, Report *r);
+int save_reports();
+int load_reports();
+
+// Add a report to the user's list. Save to file if the third parameter is true.
+int add_report(User *u, Report *r, bool save);
 
 #endif // SYMPTOMS_H_INCLUDED

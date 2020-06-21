@@ -6,7 +6,7 @@
 #include "user.h"
 #include "linkedlist.h"
 
-#define filename "users.csv"
+#define FILENAME "users.csv"
 
 #define BUF_SIZE 2048
 
@@ -17,7 +17,7 @@ int users_max_id = 0; // We keep track of the highest ID so we know which one to
 int load_users()
 {
     if (users) return -1; // Users already loaded.
-    FILE *f = fopen(filename, "r");
+    FILE *f = fopen(FILENAME, "r");
     if (f == NULL) // Could not open the file.
     {
         return -1;
@@ -71,7 +71,7 @@ int load_users()
 // TODO Do a save and rename.
 int save_users()
 {
-    FILE *f = fopen(filename, "w+");
+    FILE *f = fopen(FILENAME, "w+");
     if (f == NULL)
     {
         fprintf(stderr, "%s:%d Could not open file.\n", __FUNCTION__, __LINE__); // Print a nice error message with function name and line number.

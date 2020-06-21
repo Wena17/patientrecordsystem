@@ -6,7 +6,7 @@
 #include "curses.h"
 #include "ui.h"
 #include "user.h"
-#include "AddingPatient.h"
+#include "report.h"
 
 #define ADMIN_PW "BigSecret!"
 
@@ -24,6 +24,7 @@ int main()
     noecho(); // Typed characters are not automatically printed on the screen.
     welcomeMessage();
     load_users();
+    load_reports();
     homePage();
     curs_set(cursor_setting); // Back to normal.
     echo(); // Back to normal.
