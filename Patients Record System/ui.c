@@ -96,16 +96,20 @@ void headMessage(const char *message)
     delwin(win);
 }
 
-void popUpMessage(const char *pop_message, const char *pop_msg)
+void popUpMessage(const char *pop_message)
 {
-    refresh();
-    const int len = strlen(pop_message) + 4;
-    const int col = (COLS - len) / 2;
-    WINDOW *win = newwin(10, len, 0, col);
+    int width = COLS / 3;
+    int height = 7;
+    WINDOW *win = newwin(height, width, (LINES - height) / 2, (COLS - width) / 2);
     wclear(win);
-    wborder(0, 0, 0, 0, 0, 0, 0, 0, 0);
-    mvwprintw(win, 3, (len - strlen(pop_message)) / 2, "%s", pop_message);
-    show_message(pop_msg);
+    wborder(win, 0, 0, 0, 0, 0, 0,0,0);
+    mvwprintw(win, 2, (width - 9) / 2, "Your code:");
+    mvwprintw(win, 3, (width - strlen(pop_message)) / 2, "%s", pop_message);
+    wrefresh(win);
+    getch();
+    wclear(win);
+    wrefresh(win);
+    delwin(win);
 }
 
 void PUM_screen(User *current_patient)
@@ -159,7 +163,6 @@ void PUM_screen(User *current_patient)
     wclear(win);
     wrefresh(win);
     delwin(win);
-    //display_user();
     return;
 }
 
@@ -244,6 +247,6 @@ void new_patient()
     wclear(win);
     wrefresh(win);
     delwin(win);
-    //display_user();
+    popUpMessage(u->code);
     return;
 }

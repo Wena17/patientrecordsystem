@@ -48,7 +48,7 @@ int load_users()
                         u->health_con,
                         travel,
                         expo);
-        if (rc < 13) // The number of fields read is in rc. This should be 5 unless it's somehow an invalid line. If it's invalid, simply skip it.
+        if (rc < 15) // The number of fields read is in rc. This should be 5 unless it's somehow an invalid line. If it's invalid, simply skip it.
         {
             free(u); // Free the allocated memory because we're skipping, so we don't run out of memory eventually. It's the opposite of malloc.
             fprintf(stderr, "Skipping invalid line. %s:%d\n", __FUNCTION__, __LINE__); // Be nice and print a notice.
@@ -113,14 +113,7 @@ User *add_user(User *u)
 {
     ++users_max_id; //increment *before* assignment.
     u->id = users_max_id; // Assign the next id.
-    if(u->travel || u->expo)
-    {
-        sprintf(u->code, "PUI%05d", users_max_id);
-    }
-    else
-    {
-        sprintf(u->code, "PUM%05d", users_max_id);
-    }
+    sprintf(u->code, "PUM%05d", users_max_id);
     users = list_append(users, u);
     save_users();
     return u;

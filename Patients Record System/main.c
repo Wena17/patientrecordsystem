@@ -60,7 +60,7 @@ void welcomeMessage()
 void homePage()
 {
     headMessage("HOMEPAGE");
-    const char *m[] = { "Admin", "New Patient", "Person Under Monitoring", "Person Under Investigation", "Exit", NULL }; // The NULL pointer marks the end of the list.
+    const char *m[] = { "Admin", "New Patient", "Person Under Monitoring", "Exit", NULL }; // The NULL pointer marks the end of the list.
     bool is_running = true;
     User *u = NULL;
     while (is_running)
@@ -75,7 +75,6 @@ void homePage()
             break;
         case 1:
             new_patient();
-            popUpMessage(u->code, "To Continue ... .");
             break;
         case 2:
             u = patient_login();
@@ -85,9 +84,6 @@ void homePage()
             // TODO warning if code was entered wrong and no patient was found.
             break;
         case 3:
-            //TODO
-            break;
-        case 4:
             exit(0);
         }
     }
@@ -137,7 +133,7 @@ bool admin_login()
 void admin_screen()
 {
     headMessage("ADMIN SCREEN");
-    const char *m[] = {"Patients Under Monitoring", "Patients Under Investigation", "Change Admin Details",  "Exit", NULL }; // The NULL pointer marks the end of the list.
+    const char *m[] = {"Patients Under Monitoring", "Change Admin Details",  "Exit", NULL }; // The NULL pointer marks the end of the list.
     bool is_running = true;
     while (is_running)
     {
@@ -150,9 +146,6 @@ void admin_screen()
             //TODO
             break;
         case 2:
-            //TODO
-            break;
-        case 3:
             return;
         }
     }
