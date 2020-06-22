@@ -75,6 +75,7 @@ void homePage()
             break;
         case 1:
             new_patient();
+            popUpMessage(u->code, "To Continue ... .");
             break;
         case 2:
             u = patient_login();

@@ -96,6 +96,18 @@ void headMessage(const char *message)
     delwin(win);
 }
 
+void popUpMessage(const char *pop_message, const char *pop_msg)
+{
+    refresh();
+    const int len = strlen(pop_message) + 4;
+    const int col = (COLS - len) / 2;
+    WINDOW *win = newwin(10, len, 0, col);
+    wclear(win);
+    wborder(0, 0, 0, 0, 0, 0, 0, 0, 0);
+    mvwprintw(win, 3, (len - strlen(pop_message)) / 2, "%s", pop_message);
+    show_message(pop_msg);
+}
+
 void PUM_screen(User *current_patient)
 {
     headMessage("Person Under Monitoring");

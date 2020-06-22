@@ -32,7 +32,7 @@ int load_users()
         User *u = malloc(sizeof(User)); // Allocate memory for one user.
         char travel[BUF_SIZE];
         char expo[BUF_SIZE];
-        int rc = sscanf(buf, "%d,%255[^,\n],%255[^,\n],%d,%255[^,\n],%255[^,\n],%255[^,\n],%d,%d,%d,%255[^,\n],%d,%255[^,\n],%255[^,\n],%255[^,\n]",
+        int rc = sscanf(buf, "%d,%255[^,\n],%255[^,\n],%d,%255[^,\n],%255[^,\n],%255[^,\n],%d/%d/%d,%255[^,\n],%d,%255[^,\n],%255[^,\n],%255[^,\n]",
                         &u->id,
                         u->code,
                         u->name,
@@ -48,10 +48,10 @@ int load_users()
                         u->health_con,
                         travel,
                         expo);
-        if (rc < 6) // The number of fields read is in rc. This should be 5 unless it's somehow an invalid line. If it's invalid, simply skip it.
+        if (rc < 13) // The number of fields read is in rc. This should be 5 unless it's somehow an invalid line. If it's invalid, simply skip it.
         {
             free(u); // Free the allocated memory because we're skipping, so we don't run out of memory eventually. It's the opposite of malloc.
-            fprintf(stderr, "Skipping invalid line.\n"); // Be nice and print a notice.
+            fprintf(stderr, "Skipping invalid line. %s:%d\n", __FUNCTION__, __LINE__); // Be nice and print a notice.
             continue; // Loop around.
         }
         u->travel = (strcmp(travel, "Yes") == 0);

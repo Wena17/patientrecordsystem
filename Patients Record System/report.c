@@ -96,7 +96,7 @@ int load_reports()
         char vomit[BUF_SIZE];
         char diarrhea[BUF_SIZE];
         char other[BUF_SIZE];
-        int rc = sscanf(buf, "%d,%d,%d,%d,%d,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s",
+        int rc = sscanf(buf, "%d,%d,%d,%d,%d,%255[^,\n],%255[^,\n],%255[^,\n],%255[^,\n],%255[^,\n],%255[^,\n],%255[^,\n],%255[^,\n],%255[^,\n],%255[^,\n],%255[^,\n]",
                         &uid,
                         &r->day,
                         &r->mm,
@@ -113,10 +113,10 @@ int load_reports()
                         vomit,
                         diarrhea,
                         other);
-        if (rc < 16) // The number of fields read is in rc. This should be 5 unless it's somehow an invalid line. If it's invalid, simply skip it.
+        if (rc < 16 ) // The number of fields read is in rc. This should be 5 unless it's somehow an invalid line. If it's invalid, simply skip it.
         {
             free(r); // Free the allocated memory because we're skipping, so we don't run out of memory eventually. It's the opposite of malloc.
-            fprintf(stderr, "Skipping invalid line.\n"); // Be nice and print a notice.
+            fprintf(stderr, "Skipping invalid line; read %d fields. %s:%d\n", rc, __FUNCTION__, __LINE__); // Be nice and print a notice.
             continue; // Loop around.
         }
         r->fever = (strcmp(fever, "Yes") == 0);
