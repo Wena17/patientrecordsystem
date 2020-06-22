@@ -38,7 +38,7 @@ int save_reports()
         while (rlink)
         {
             Report *r = (Report *) rlink->elem;
-            int written = fprintf(f, "%d,%d,%d,%d,%d,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n",
+            int written = fprintf(f, "%d,%d,%d/%d/%d,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n",
                                   u->id,
                                   r->day,
                                   r->mm,
@@ -96,7 +96,7 @@ int load_reports()
         char vomit[BUF_SIZE];
         char diarrhea[BUF_SIZE];
         char other[BUF_SIZE];
-        int rc = sscanf(buf, "%d,%d,%d,%d,%d,%255[^,\n],%255[^,\n],%255[^,\n],%255[^,\n],%255[^,\n],%255[^,\n],%255[^,\n],%255[^,\n],%255[^,\n],%255[^,\n],%255[^,\n]",
+        int rc = sscanf(buf, "%d,%d,%d/%d/%d,%255[^,\n],%255[^,\n],%255[^,\n],%255[^,\n],%255[^,\n],%255[^,\n],%255[^,\n],%255[^,\n],%255[^,\n],%255[^,\n],%255[^,\n]",
                         &uid,
                         &r->day,
                         &r->mm,
