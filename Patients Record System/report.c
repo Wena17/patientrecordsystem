@@ -9,8 +9,11 @@
 #define FILENAME "reports.csv"
 #define BUF_SIZE 2048
 
+int num = 0;
+
 int add_report(User *patient, Report *current_report, bool save)
 {
+    current_report->day = ++num;
     current_report->patient = patient;
     patient->reports = list_append(patient->reports, current_report);
     if (save)

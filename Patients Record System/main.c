@@ -78,7 +78,9 @@ void homePage()
             break;
         case 2:
             u = patient_login();
-            if (u != NULL) {
+            if (u != NULL)
+            {
+                popUpMessage("NOTE: Just press n for NO", "and y for YES");
                 PUM_screen(u);
             }
             // TODO warning if code was entered wrong and no patient was found.

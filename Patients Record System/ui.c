@@ -8,8 +8,6 @@
 #include "report.h"
 
 bool get_yes_no(WINDOW *win, int row, int col);
-
-int num = 0;
 /* Show a menu with a null-pointer terminated list of items and return the index of the user's selection.
  *
  * The format parameter can be:
@@ -96,14 +94,14 @@ void headMessage(const char *message)
     delwin(win);
 }
 
-void popUpMessage(const char *pop_message)
+void popUpMessage(const char *pmsg, const char *pop_message)
 {
     int width = COLS / 3;
     int height = 7;
     WINDOW *win = newwin(height, width, (LINES - height) / 2, (COLS - width) / 2);
     wclear(win);
     wborder(win, 0, 0, 0, 0, 0, 0,0,0);
-    mvwprintw(win, 2, (width - 9) / 2, "Your code:");
+    mvwprintw(win, 2, (width - strlen(pmsg)) / 2, "%s", pmsg);
     mvwprintw(win, 3, (width - strlen(pop_message)) / 2, "%s", pop_message);
     wrefresh(win);
     getch();
@@ -116,7 +114,7 @@ void PUM_screen(User *current_patient)
 {
     headMessage("Person Under Monitoring");
     Report *s = malloc(sizeof(Report));
-    s->day = ++num;
+    char *temp;
     time_t current_time;
     time(&current_time); // Get the current time.
     struct tm *local_time = localtime(&current_time); // Convert to a struct containing the local time.
@@ -128,7 +126,6 @@ void PUM_screen(User *current_patient)
     int height = 15;
     WINDOW *win = newwin(height, width, (LINES - height) / 2, (COLS - width) / 2);
     wclear(win);
-    mvwprintw(win, 2, 2, "Day: .................... %02d", s->day);
     mvwprintw(win, 3, 2, "Date: ................... %02d/%02d/%d", s->mm, s->dd, s->yy); //"02" 2 means two digits then 0 means zero in front if necessary.
     mvwprintw(win, 4, 2, "Fever: ..................");
     mvwprintw(win, 5, 2, "Sore throat: ............");
@@ -163,6 +160,17 @@ void PUM_screen(User *current_patient)
     wclear(win);
     wrefresh(win);
     delwin(win);
+    sprintf(temp, "Day %d", s->day);
+    if(s->fever || s->sore_throat || s->cough || s->nose || s->breath || s->fatigue || s->pain || s->chills || s->vomit || s->diarrhea || s->other)
+    {
+        popUpMessage("We see any symptoms on your", temp);
+        popUpMessage("We will refer you", "to a quarantine facilities");
+        popUpMessage("Don't be afraid", "Please bear with our personel");
+    }
+    else
+    {
+        popUpMessage("Your done with", temp);
+    }
     return;
 }
 
@@ -247,6 +255,6 @@ void new_patient()
     wclear(win);
     wrefresh(win);
     delwin(win);
-    popUpMessage(u->code);
+    popUpMessage("Your code", u->code);
     return;
 }

@@ -6,7 +6,7 @@
 int menu(const char **items); // This is a big menu with a box.
 void show_message(char *msg);
 void headMessage(const char *message);
-void popUpMessage(const char *pop_message);
+void popUpMessage(const char *pop_message, const char *pmsg);
 void PUM_screen(User *u);
 void new_patient();
 
