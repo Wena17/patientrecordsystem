@@ -258,3 +258,8 @@ void new_patient()
     popUpMessage("Your code", u->code);
     return;
 }
+
+char show_edit_menu(bool has_edit)
+{
+
+}

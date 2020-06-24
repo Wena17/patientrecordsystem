@@ -31,10 +31,6 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
-		<Unit filename="AddingPatient.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="AddingPatient.h" />
 		<Unit filename="curses.h">
 			<Option target="&lt;{~None~}&gt;" />
 		</Unit>
@@ -45,6 +41,10 @@
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="report.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="report.h" />
 		<Unit filename="ui.c">
 			<Option compilerVar="CC" />
 		</Unit>
