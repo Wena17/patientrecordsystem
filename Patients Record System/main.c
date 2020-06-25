@@ -327,6 +327,9 @@ void show_patients()
 //                }
 //            }
             break;
+        case 'v':
+            // TODO show patient records
+            break;
         default:
             show_message("Invalid selection.");
             break;

@@ -261,15 +261,16 @@ void new_patient()
 
 char show_edit_menu(const bool has_edit, const int records_per_page)
 {
-    const int col = COLS / 4;
-    char allowed[] = "depn0123456789";
-    allowed[5 + records_per_page] = '\0'; // Do not allow selections beyond the number of records per page.
-    if (has_edit)
-    mvprintw(LINES - 2, col - 15, "(e) Edit");
-    mvprintw(LINES - 2, col, "(d) Delete");
-    mvprintw(LINES - 2, col + 15, "(p) Previous");
-    mvprintw(LINES - 2, col + 32, "(n) Next");
-    mvprintw(LINES - 2, col + 47, "(0) Back");
+    const int col = (COLS - 53) / 2;
+    char allowed[] = "vdepn0123456789";
+    allowed[6 + records_per_page] = '\0'; // Do not allow selections beyond the number of records per page.
+    mvprintw(LINES - 2, col, "(v) View");
+    if (has_edit) mvprintw(LINES - 2, col + 8, "(e)dit");
+    mvprintw(LINES - 2, col + 16, "(d)elete");
+    mvprintw(LINES - 2, col + 26, "(p)revious");
+    mvprintw(LINES - 2, col + 38, "(n)ext");
+    mvprintw(LINES - 2, col + 46, "(0)back");
+    refresh();
     cbreak();
     noecho();
     while (true)
