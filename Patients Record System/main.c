@@ -10,8 +10,6 @@
 
 #define ADMIN_PW "BigSecret!"
 
-LinkedList *users = NULL;
-
 /* Declare functions before use. */
 void welcomeMessage();
 void homePage();
@@ -37,7 +35,7 @@ int main()
 
 void welcomeMessage()
 {
-   headMessage("Welcome");
+    headMessage("Welcome");
     /* This can be optimized to use screen coordinates. */
     move(11, 0);
     printw("\n\t\t\t\t\t     °°                       °°");
@@ -205,75 +203,77 @@ User *patient_login()
 void show_patients()
 {
     clear();
-    headMessage("PATIENT'S");
-    int col = COLS;
+    headMessage("PATIENTS");
+    int col = (COLS - 72) / 2;
     int page = 0;
+    int records_per_page = (LINES - 2 - 13) / 3;
     User *selected_user = NULL; // Here we store the current selection or NULL if nothing is seletec.
-    User *displayed_users[9]; // Here we remember which user is displayed at which position on the screen.
-    mvprintw(10, col - 10, "No.");
-    mvprintw(10, col + 15, "Code");
-    mvprintw(10, col + 25, "Name");
-    mvprintw(10, col + 35, "Age");
-    mvprintw(10, col + 40, "Gender");
-    mvprintw(10, col + 47, "Nationality");
-    mvprintw(10, col + 60, "Phone");
-    mvprintw(10, col + 75, "Started Date");
-    mvprintw(10, col + 87, "Address");
-    mvprintw(10, col + 105, "Household number");
-    mvprintw(10, col + 110, "Other health condition");
-    mvprintw(10, col + 125, "Travel with countries with COVID 19");
-    mvprintw(10, col + 140, "Exposure to confirmed COVID 19 patient");
+    User *displayed_users[records_per_page]; // Here we remember which user is displayed at which position on the screen.
+    mvprintw(10, col + 3, "#");
+    mvprintw(10, col + 6, "Code");
+    mvprintw(10, col + 15, "Name");
+    mvprintw(10, col + 31, "Age");
+    mvprintw(10, col + 35, "Gender");
+    mvprintw(10, col + 42, "Nat");
+    mvprintw(10, col + 46, "Phone");
+    mvprintw(10, col + 64, "Started Date");
+    mvprintw(11, col + 6, "Address");
+    mvprintw(11, col + 31, "#HH");
+    mvprintw(11, col + 35, "Health condition");
+    mvprintw(11, col + 56, "Travel");
+    mvprintw(11, col + 64, "Exposure");
     while(true)
     {
-        int line = 12; // Display always starts at line 12.
+        int line = 13; // Display always starts at line 12.
         move(line, 0);
         clrtobot();
-        for (int i = 0; i < 9; i++)
+        for (int i = 0; i < records_per_page; i++)
             displayed_users[i] = NULL; // Erase the array of displayed users.
-        User *current = get_users(); // Get the start of the list of users.
+        LinkedList *link = get_users(); // Get the start of the list of users.
         int i = 0; // Variable for counting.
-        while (current != NULL && i < 9 * (page + 1)) // Only need to loop until the last user that is on the current page.
+        while (link != NULL && i < records_per_page * (page + 1)) // Only need to loop until the last user that is on the current page.
         {
-                if (i >= 9 * page && i < 9 * (page + 1)) // Check if the current user should be displayed on the current page.
+            User *current = (User *) link->elem;
+            if (i >= records_per_page * page && i < records_per_page * (page + 1)) // Check if the current user should be displayed on the current page.
+            {
+                displayed_users[i % records_per_page] = current; // Now remember we are displaying the current user at the current position.
+                mvprintw(line, col + 3, "%d", i % 9 + 1);
+                mvprintw(line, col + 6, "%s", current->code);
+                clrtoeol();
+                mvprintw(line, col + 15, "%s", current->name);
+                clrtoeol();
+                mvprintw(line, col + 31, "%d", current->age);
+                clrtoeol();
+                mvprintw(line, col + 35, "%s", current->gender);
+                clrtoeol();
+                mvprintw(line, col + 42, "%c%c", current->nationality[0], current->nationality[1]);
+                clrtoeol();
+                mvprintw(line, col + 46, "%s", current->phone);
+                clrtoeol();
+                mvprintw(line, col + 64, "%d/%d/%d", current->mm, current->dd, current->yy);
+                clrtoeol();
+                mvprintw(line + 1, col + 6, "%s", current->address);
+                clrtoeol();
+                mvprintw(line + 1, col + 31, "%d", current->h_num);
+                clrtoeol();
+                mvprintw(line + 1, col + 35, "%s", current->health_con);
+                clrtoeol();
+                mvprintw(line + 1, col + 56, "%s", current->travel ? "Yes" : "No");
+                clrtoeol();
+                mvprintw(line + 1, col + 64, "%s", current->expo ? "Yes" : "No");
+                clrtoeol();
+                if (current == selected_user)
                 {
-                    displayed_users[i % 9] = current; // Now remember we are displaying the current user at the current position.
-                    mvprintw(line, col - 10, "%d   =>", i % 9 + 1);
-                    mvprintw(line, col + 15, "%s", current->code);
-                    clrtoeol();
-                    mvprintw(line, col + 25, "%s", current->name);
-                    clrtoeol();
-                    mvprintw(line, col + 60, "%d", current->age);
-                    clrtoeol();
-                    mvprintw(line, col + 70, "%s", current->gender);
-                    clrtoeol();
-                    mvprintw(line, col + 70, "%s", current->nationality);
-                    clrtoeol();
-                    mvprintw(line, col + 70, "%s", current->phone);
-                    clrtoeol();
-                    mvprintw(line, col + 70, "%d/%d/%d", current->mm, current->dd, current->yy);
-                    clrtoeol();
-                    mvprintw(line, col + 70, "%s", current->address);
-                    clrtoeol();
-                    mvprintw(line, col + 70, "%d", current->h_num);
-                    clrtoeol();
-                    mvprintw(line, col + 70, "%s", current->health_con);
-                    clrtoeol();
-                    mvprintw(line, col + 70, "%s", current->travel);
-                    clrtoeol();
-                    mvprintw(line, col + 70, "%s", current->expo);
-                    clrtoeol();
-                    if (current == selected_user)
-                    {
-                        mvprintw(line, col - 15, "(Selected)");
-                    }
-                    line++; // Go to next line in the table.
+                    mvprintw(line, col, "=>");
                 }
-                i++; // Wether this user is on this page or not, count up.
-
-            users = list_append(users, current);
+                line += 3; // Go to next line in the table.
+            }
+            i++; // Wether this user is on this page or not, count up.
+            link = link->next;
         }
-        bool is_last_page = current == NULL;
-        char c = show_edit_menu(false);
+        refresh();
+        bool is_last_page = link == NULL;
+        char c = show_edit_menu(false, records_per_page);
         switch (c)
         {
         case '1':
@@ -290,6 +290,7 @@ void show_patients()
         case '0':
             move(10, 0);
             clrtobot();
+            refresh();
             return;
         case 'p':
             if (page == 0)

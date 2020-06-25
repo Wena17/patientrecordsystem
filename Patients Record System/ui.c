@@ -114,7 +114,7 @@ void PUM_screen(User *current_patient)
 {
     headMessage("Person Under Monitoring");
     Report *s = malloc(sizeof(Report));
-    char *temp;
+    char temp[256];
     time_t current_time;
     time(&current_time); // Get the current time.
     struct tm *local_time = localtime(&current_time); // Convert to a struct containing the local time.
@@ -237,7 +237,7 @@ void new_patient()
     mvwscanw(win, 2, 15, "%50[^\n]", u->name);
     mvwscanw(win, 3, 15, "%d", &u->age);
     mvwscanw(win, 4, 15, "%20[^\n]", u->gender);
-    mvwscanw(win, 5, 15, "%50[^\n]", u->nationality);
+    mvwscanw(win, 5, 15, "%50[^\n]", u->nationality); // TODO Let user choose from a list of nationalities.
     mvwscanw(win, 6, 15, "%50[^\n]", &u->phone);
     mvwscanw(win, 8, 15, "%255[^\n]", u->address);
     mvwscanw(win, 9, 37, "%d", &u->h_num);
@@ -259,7 +259,28 @@ void new_patient()
     return;
 }
 
-char show_edit_menu(bool has_edit)
+char show_edit_menu(const bool has_edit, const int records_per_page)
 {
-
+    const int col = COLS / 4;
+    char allowed[] = "depn0123456789";
+    allowed[5 + records_per_page] = '\0'; // Do not allow selections beyond the number of records per page.
+    if (has_edit)
+    mvprintw(LINES - 2, col - 15, "(e) Edit");
+    mvprintw(LINES - 2, col, "(d) Delete");
+    mvprintw(LINES - 2, col + 15, "(p) Previous");
+    mvprintw(LINES - 2, col + 32, "(n) Next");
+    mvprintw(LINES - 2, col + 47, "(0) Back");
+    cbreak();
+    noecho();
+    while (true)
+    {
+        char c = tolower(getch());
+        const char *s = allowed;
+        while (*s)
+        {
+            if (*s == c && (has_edit || c != 'e'))
+                return c;
+            s++;
+        }
+    }
 }
