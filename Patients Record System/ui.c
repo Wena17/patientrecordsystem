@@ -124,7 +124,10 @@ void PUM_screen(User *current_patient)
     free(local_time);
     s->patient = current_patient;
     s->day = get_day_number(s);
-    if (has_report(current_patient, s->day)) {
+    if (s->day >= 14) {
+        free(s);
+        popUpMessage("You have already completed", "your 14 day reporting period.");
+    } else if (has_report(current_patient, s->day)) {
         free(s);
         show_message("You have already reported today.");
     } else {
