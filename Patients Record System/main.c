@@ -17,6 +17,7 @@ bool admin_login();
 void admin_screen();
 User *patient_login();
 void show_patients();
+void display_reports(User *u);
 
 int main()
 {
@@ -328,11 +329,56 @@ void show_patients()
 //            }
             break;
         case 'v':
-            // TODO show patient records
+            // TODO hide view function when now user is selected.
+            if (selected_user) display_reports(selected_user);
             break;
         default:
             show_message("Invalid selection.");
             break;
         }
     }
+}
+
+void display_reports(User *u) {
+    clear();
+    headMessage("Reports");
+    mvprintw(12, 0, "Patient name:        %s", u->name);
+    // TODO calculate finish date
+    mvprintw(12, 0, "Date:                %02d/%02d/%02d    %02d/%02d/%02d", u->mm, u->dd, u->yy, u->mm, u->dd, u->yy);
+    mvprintw(13, 20, "|            |");
+    mvprintw(14, 0, "Report:             --------------");
+    mvprintw(14, 60, "--------------");
+    mvprintw(15, 0, "Fever:");
+    mvprintw(16, 0, "Sore throat:");
+    mvprintw(17, 0, "Cough:");
+    mvprintw(18, 0, "Runny nose:");
+    mvprintw(19, 0, "Diff. breathing:");
+    mvprintw(15, 40, "Fatigue:");
+    mvprintw(16, 40, "Muscle/joint pain:");
+    mvprintw(17, 40, "Chills:");
+    mvprintw(18, 40, "Nausea/vomiting:");
+    mvprintw(19, 40, "Diarrhea:");
+    mvprintw(20, 40, "Other symptoms:");
+    LinkedList *link = u->reports;
+    while (link) {
+        Report *report = (Report *) link->elem;
+        int col = 54 - report->day;
+        mvprintw(14, col, "Y");
+        mvprintw(14, col + 20, "Y");
+        mvprintw(15, col, report->fever ? "Y" : "-");
+        mvprintw(16, col, report->sore_throat ? "Y" : "-");
+        mvprintw(17, col, report->cough ? "Y" : "-");
+        mvprintw(18, col, report->nose ? "Y" : "-");
+        mvprintw(19, col, report->breath ? "Y" : "-");
+        mvprintw(15, col + 20, report->fatigue ? "Y" : "-");
+        mvprintw(16, col + 20, report->pain ? "Y" : "-");
+        mvprintw(17, col + 20, report->chills ? "Y" : "-");
+        mvprintw(18, col + 20, report->vomit ? "Y" : "-");
+        mvprintw(19, col + 20, report->diarrhea ? "Y" : "-");
+        mvprintw(20, col + 20, report->other ? "Y" : "-");
+    }
+    refresh();
+    show_message("Press key to return");
+    clear();
+    refresh();
 }

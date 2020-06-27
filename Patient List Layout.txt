@@ -3,3 +3,6 @@
       Address                  #HH Health conditions    Travel  Exposure
 => 9  12345678 123456789012345 999 female PH  +xx xxx xxxx xxxx mm/dd/yy
       123456789012345678901234 999 12345678901234567    Yes     Yes
+
+0---------1---------2---------3---------4---------5---------6---------7---------|
+(v)iew  (e)dit  (d)elete  (p)revious  (n)ext  (0)back

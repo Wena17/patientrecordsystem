@@ -134,7 +134,8 @@ int load_reports()
         r->vomit = (strcmp(vomit, "Yes") == 0);
         r->diarrhea = (strcmp(diarrhea, "Yes") == 0);
         r->other = (strcmp(other, "Yes") == 0);
-        add_report(get_user(uid), r, false); // Do not save the file while loading it.
+        User *u = get_user(uid);
+        u->reports = list_append(u->reports, r);
         count++; // We've read one more report.
     }
     fclose(f); // We're done here. File is read completely. We get here only through the break statement further up.

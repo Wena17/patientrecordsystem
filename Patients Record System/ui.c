@@ -83,7 +83,7 @@ void headMessage(const char *message)
     mvwprintw(win, 0, 0, "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
     mvwprintw(win, 1, 0, "í~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~í");
     mvwprintw(win, 2, 0, "!!                                                  !!");
-    mvwprintw(win, 3, 0, "!!                PATIENT'S RECORDS                 !!");
+    mvwprintw(win, 3, 0, "!!                 PATIENT RECORDS                  !!");
     mvwprintw(win, 4, 0, "!!                                                  !!");
     mvwprintw(win, 5, 0, "í~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~í");
     mvwprintw(win, 6, 0, "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
@@ -149,7 +149,7 @@ void PUM_screen(User *current_patient)
     s->chills = get_yes_no(win, 11, 28);
     s->vomit = get_yes_no(win, 12, 28);
     s->diarrhea = get_yes_no(win, 13, 28);
-    s->other = get_yes_no(win, 14, 28);
+    s->other = get_yes_no(win, 14, 28); // TODO make other symptoms a text field
     if (add_report(current_patient, s, true)) // Add report and check if something went wrong.
     {
         free(s);
