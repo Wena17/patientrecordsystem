@@ -39,5 +39,6 @@ User *get_user(const int id);
 User *get_user_by_code(const char *code);
 void delete_user(User *user);
 int get_user_count();
+bool has_report(User *user, int day);
 
 #endif // USER_H_INCLUDED

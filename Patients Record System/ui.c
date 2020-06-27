@@ -122,54 +122,61 @@ void PUM_screen(User *current_patient)
     s->dd = local_time->tm_mday; // Get the day of the month, starting at 1 as it should.
     s->yy = local_time->tm_year + 1900; // Get the year, where 0 actually means 1900.
     free(local_time);
-    int width = COLS / 2;
-    int height = 15;
-    WINDOW *win = newwin(height, width, (LINES - height) / 2, (COLS - width) / 2);
-    wclear(win);
-    mvwprintw(win, 3, 2, "Date: ................... %02d/%02d/%d", s->mm, s->dd, s->yy); //"02" 2 means two digits then 0 means zero in front if necessary.
-    mvwprintw(win, 4, 2, "Fever: ..................");
-    mvwprintw(win, 5, 2, "Sore throat: ............");
-    mvwprintw(win, 6, 2, "Cough: ..................");
-    mvwprintw(win, 7, 2, "Runny nose: .............");
-    mvwprintw(win, 8, 2, "Shortness of breathing: .");
-    mvwprintw(win, 9, 2, "Fatigue: ................");
-    mvwprintw(win, 10, 2, "Muscle pain / Joint pain:");
-    mvwprintw(win, 11, 2, "Chills: .................");
-    mvwprintw(win, 12, 2, "Vommit / Nausea: ........");
-    mvwprintw(win, 13, 2, "Diarrhea: ...............");
-    mvwprintw(win, 14, 2, "Other symptoms: .........");
-    wrefresh(win);
-    s->fever = get_yes_no(win, 4, 28);
-    s->sore_throat = get_yes_no(win, 5, 28);
-    s->cough = get_yes_no(win, 6, 28);
-    s->nose = get_yes_no(win, 7, 28);
-    s->breath = get_yes_no(win, 8, 28);
-    s->fatigue = get_yes_no(win, 9, 28);
-    s->pain = get_yes_no(win, 10, 28);
-    s->chills = get_yes_no(win, 11, 28);
-    s->vomit = get_yes_no(win, 12, 28);
-    s->diarrhea = get_yes_no(win, 13, 28);
-    s->other = get_yes_no(win, 14, 28); // TODO make other symptoms a text field
-    if (add_report(current_patient, s, true)) // Add report and check if something went wrong.
-    {
+    s->patient = current_patient;
+    s->day = get_day_number(s);
+    if (has_report(current_patient, s->day)) {
         free(s);
-        show_message("Something went wrong. Press any key to continue.");
+        show_message("You have already reported today.");
+    } else {
+        int width = COLS / 2;
+        int height = 15;
+        WINDOW *win = newwin(height, width, (LINES - height) / 2, (COLS - width) / 2);
+        wclear(win);
+        mvwprintw(win, 3, 2, "Date: ................... %02d/%02d/%d", s->mm, s->dd, s->yy); //"02" 2 means two digits then 0 means zero in front if necessary.
+        mvwprintw(win, 4, 2, "Fever: ..................");
+        mvwprintw(win, 5, 2, "Sore throat: ............");
+        mvwprintw(win, 6, 2, "Cough: ..................");
+        mvwprintw(win, 7, 2, "Runny nose: .............");
+        mvwprintw(win, 8, 2, "Shortness of breathing: .");
+        mvwprintw(win, 9, 2, "Fatigue: ................");
+        mvwprintw(win, 10, 2, "Muscle pain / Joint pain:");
+        mvwprintw(win, 11, 2, "Chills: .................");
+        mvwprintw(win, 12, 2, "Vommit / Nausea: ........");
+        mvwprintw(win, 13, 2, "Diarrhea: ...............");
+        mvwprintw(win, 14, 2, "Other symptoms: .........");
         wrefresh(win);
-        getch();
-    }
-    wclear(win);
-    wrefresh(win);
-    delwin(win);
-    sprintf(temp, "Day %d", s->day);
-    if(s->fever || s->sore_throat || s->cough || s->nose || s->breath || s->fatigue || s->pain || s->chills || s->vomit || s->diarrhea || s->other)
-    {
-        popUpMessage("We see any symptoms on your", temp);
-        popUpMessage("We will refer you", "to a quarantine facilities");
-        popUpMessage("Don't be afraid", "Please bear with our personel");
-    }
-    else
-    {
-        popUpMessage("Your done with", temp);
+        s->fever = get_yes_no(win, 4, 28);
+        s->sore_throat = get_yes_no(win, 5, 28);
+        s->cough = get_yes_no(win, 6, 28);
+        s->nose = get_yes_no(win, 7, 28);
+        s->breath = get_yes_no(win, 8, 28);
+        s->fatigue = get_yes_no(win, 9, 28);
+        s->pain = get_yes_no(win, 10, 28);
+        s->chills = get_yes_no(win, 11, 28);
+        s->vomit = get_yes_no(win, 12, 28);
+        s->diarrhea = get_yes_no(win, 13, 28);
+        s->other = get_yes_no(win, 14, 28); // TODO make other symptoms a text field
+        if (add_report(current_patient, s, true)) // Add report and check if something went wrong.
+        {
+            free(s);
+            show_message("Something went wrong. Press any key to continue.");
+            wrefresh(win);
+            getch();
+        }
+        wclear(win);
+        wrefresh(win);
+        delwin(win);
+        sprintf(temp, "Day %d", s->day);
+        if(s->fever || s->sore_throat || s->cough || s->nose || s->breath || s->fatigue || s->pain || s->chills || s->vomit || s->diarrhea || s->other)
+        {
+            popUpMessage("We see any symptoms on your", temp);
+            popUpMessage("We will refer you", "to a quarantine facilities");
+            popUpMessage("Don't be afraid", "Please bear with our personel");
+        }
+        else
+        {
+            popUpMessage("Your done with", temp);
+        }
     }
     return;
 }

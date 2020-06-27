@@ -8,6 +8,7 @@ typedef struct s_linkedlist
 } LinkedList;
 
 LinkedList *list_append(LinkedList *the_list, void *elem);
+LinkedList *list_prepend(LinkedList *the_list, void *elem);
 LinkedList *list_delete(LinkedList *list, void *elem);
 
 #endif // LINKEDLIST_H_INCLUDED

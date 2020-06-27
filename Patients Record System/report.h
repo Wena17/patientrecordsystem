@@ -32,4 +32,7 @@ int load_reports();
 // Add a report to the user's list. Save to file if the third parameter is true.
 int add_report(User *u, Report *r, bool save);
 
+// Give us the day number of this report.
+int get_day_number(Report *r);
+
 #endif // SYMPTOMS_H_INCLUDED

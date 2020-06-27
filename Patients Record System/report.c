@@ -9,13 +9,11 @@
 #define FILENAME "reports.csv"
 #define BUF_SIZE 2048
 
-int num = 0;
-
 int add_report(User *patient, Report *current_report, bool save)
 {
-    current_report->day = ++num;
     current_report->patient = patient;
-    patient->reports = list_append(patient->reports, current_report);
+    current_report->day = get_day_number(current_report);
+    patient->reports = list_prepend(patient->reports, current_report); // This is a stack!
     if (save)
     {
         save_users();
@@ -69,6 +67,7 @@ int save_reports()
         ulink = ulink->next;
     }
     fclose(f); // We're done here.
+
     return 0;
 }
 
@@ -141,4 +140,20 @@ int load_reports()
     }
     fclose(f); // We're done here. File is read completely. We get here only through the break statement further up.
     return count; // Return the number of reports, just to be nice.
+}
+
+int get_day_number(Report *r)
+{
+    struct tm start, rep;
+    start.tm_mday = r->patient->dd;
+    start.tm_mon = r->patient->mm - 1;
+    start.tm_year = r->patient->yy - 1900;
+    start.tm_hour = start.tm_min = start.tm_sec = 0;
+    time_t s = mktime(&start);
+    rep.tm_mday = r->dd;
+    rep.tm_mon = r->mm - 1;
+    rep.tm_year = r->yy - 1900;
+    rep.tm_hour = rep.tm_min = rep.tm_sec = 0;
+    time_t rr = mktime(&rep);
+    return (rr - s) / 3600 / 24;
 }

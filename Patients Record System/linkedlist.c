@@ -3,6 +3,7 @@
 
 #include "linkedlist.h"
 
+/* This is implementing queue behavior. */
 LinkedList *list_append(LinkedList *list, void *elem)
 {
     LinkedList *new_link = malloc(sizeof(LinkedList));
@@ -22,6 +23,14 @@ LinkedList *list_append(LinkedList *list, void *elem)
         return new_link;
     }
 
+}
+
+/* This is implementing stack behavior. */
+LinkedList *list_prepend(LinkedList *the_list, void *elem) {
+    LinkedList *new_link = malloc(sizeof(LinkedList));
+    new_link->elem = elem;
+    new_link->next = the_list;
+    return new_link;
 }
 
 LinkedList *list_delete(LinkedList *list, void *elem)

@@ -5,6 +5,7 @@
 
 #include "user.h"
 #include "linkedlist.h"
+#include "report.h"
 
 #define FILENAME "users.csv"
 
@@ -157,4 +158,14 @@ void delete_user(User *user)
 {
     users = list_delete(users, user);
     save_users(); // Save our changes to disk.
+}
+
+bool has_report(User *u, int day) {
+    LinkedList *link = u->reports;
+    while (link) {
+        Report *r = (Report *) link->elem;
+        if (r->day == day) return true;
+        link = link->next;
+    }
+    return false;
 }

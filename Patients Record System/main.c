@@ -375,7 +375,7 @@ void display_reports(User *u) {
     LinkedList *link = u->reports;  // This is a stack.
     while (link) {
         Report *report = (Report *) link->elem;
-        int col = 34 - report->day;
+        int col = 34 - get_day_number(report);
         mvprintw(14, col, "Y");
         mvprintw(14, col + 40, "Y");
         mvprintw(15, col, report->fever ? "Y" : "-");
