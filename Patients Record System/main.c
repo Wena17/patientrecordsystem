@@ -343,8 +343,21 @@ void display_reports(User *u) {
     clear();
     headMessage("Reports");
     mvprintw(12, 0, "Patient name:        %s", u->name);
+    struct tm start;
+    start.tm_mday = u->dd;
+    start.tm_mon = u->mm - 1;
+    start.tm_year = u->yy - 1900;
+    start.tm_hour = 0;
+    start.tm_min = 0;
+    start.tm_sec = 0;
+    time_t fin = mktime(&start) + 13 * 24 * 3600;
+    struct tm *finish = localtime(&fin);
     // TODO calculate finish date
-    mvprintw(12, 0, "Date:                %02d/%02d/%02d    %02d/%02d/%02d", u->mm, u->dd, u->yy, u->mm, u->dd, u->yy);
+    mvprintw(12, 0, "Day:                %02d/%02d/%02d   %02d/%02d/%02d",
+             finish->tm_mon + 1,
+             finish->tm_mday,
+             finish->tm_year + 1900,
+             u->mm, u->dd, u->yy);
     mvprintw(13, 20, "|            |");
     mvprintw(14, 0, "Report:             --------------");
     mvprintw(14, 60, "--------------");
@@ -359,7 +372,7 @@ void display_reports(User *u) {
     mvprintw(18, 40, "Nausea/vomiting:");
     mvprintw(19, 40, "Diarrhea:");
     mvprintw(20, 40, "Other symptoms:");
-    LinkedList *link = u->reports;
+    LinkedList *link = u->reports;  // This is a stack.
     while (link) {
         Report *report = (Report *) link->elem;
         int col = 34 - report->day;

@@ -136,6 +136,7 @@ int load_reports()
         r->other = (strcmp(other, "Yes") == 0);
         User *u = get_user(uid);
         u->reports = list_append(u->reports, r);
+        r->patient = u;
         count++; // We've read one more report.
     }
     fclose(f); // We're done here. File is read completely. We get here only through the break statement further up.
