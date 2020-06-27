@@ -362,20 +362,21 @@ void display_reports(User *u) {
     LinkedList *link = u->reports;
     while (link) {
         Report *report = (Report *) link->elem;
-        int col = 54 - report->day;
+        int col = 34 - report->day;
         mvprintw(14, col, "Y");
-        mvprintw(14, col + 20, "Y");
+        mvprintw(14, col + 40, "Y");
         mvprintw(15, col, report->fever ? "Y" : "-");
         mvprintw(16, col, report->sore_throat ? "Y" : "-");
         mvprintw(17, col, report->cough ? "Y" : "-");
         mvprintw(18, col, report->nose ? "Y" : "-");
         mvprintw(19, col, report->breath ? "Y" : "-");
-        mvprintw(15, col + 20, report->fatigue ? "Y" : "-");
-        mvprintw(16, col + 20, report->pain ? "Y" : "-");
-        mvprintw(17, col + 20, report->chills ? "Y" : "-");
-        mvprintw(18, col + 20, report->vomit ? "Y" : "-");
-        mvprintw(19, col + 20, report->diarrhea ? "Y" : "-");
-        mvprintw(20, col + 20, report->other ? "Y" : "-");
+        mvprintw(15, col + 40, report->fatigue ? "Y" : "-");
+        mvprintw(16, col + 40, report->pain ? "Y" : "-");
+        mvprintw(17, col + 40, report->chills ? "Y" : "-");
+        mvprintw(18, col + 40, report->vomit ? "Y" : "-");
+        mvprintw(19, col + 40, report->diarrhea ? "Y" : "-");
+        mvprintw(20, col + 40, report->other ? "Y" : "-");
+        link = link->next;
     }
     refresh();
     show_message("Press key to return");

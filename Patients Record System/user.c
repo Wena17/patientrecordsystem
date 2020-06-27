@@ -30,6 +30,7 @@ int load_users()
         if (fgets(buf, BUF_SIZE, f) == NULL) //  We read the next line from the file into our buf variable. If we get NULL, we've reached the end of the file.
             break; // ... so exit the loop.
         User *u = malloc(sizeof(User)); // Allocate memory for one user.
+        u->reports = NULL; // Initialize the stack of reports.
         char travel[BUF_SIZE];
         char expo[BUF_SIZE];
         int rc = sscanf(buf, "%d,%255[^,\n],%255[^,\n],%d,%255[^,\n],%255[^,\n],%255[^,\n],%d/%d/%d,%255[^,\n],%d,%255[^,\n],%255[^,\n],%255[^,\n]",
