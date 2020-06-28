@@ -97,7 +97,10 @@ void headMessage(const char *message)
 
 void popUpMessage(const char *pmsg, const char *pop_message)
 {
-    int width = COLS / 3;
+    int w1 = strlen(pmsg);
+    int w2 = strlen(pop_message);
+    int wmax = w1 >= w2 ? w1 : w2;
+    int width = (COLS - wmax - 4) / 2;
     int height = 7;
     WINDOW *win = newwin(height, width, (LINES - height) / 2, (COLS - width) / 2);
     wclear(win);
@@ -141,6 +144,7 @@ void PUM_screen(User *current_patient)
     clear();
     refresh();
     headMessage("Person Under Monitoring");
+    refresh();
     Report *s = malloc(sizeof(Report));
     char temp[256];
     time_t current_time;
@@ -160,33 +164,33 @@ void PUM_screen(User *current_patient)
         popUpMessage("You have already reported today.", "Come back tomorrow");
     } else {
         int width = COLS / 2;
-        int height = 15;
-        WINDOW *win = newwin(height, width, (LINES - height) / 2, (COLS - width) / 2);
+        int height = 12;
+        WINDOW *win = newwin(height, width, 11, (COLS - width) / 2);
         wclear(win);
-        mvwprintw(win, 3, 2, "Date: ................... %02d/%02d/%d", s->mm, s->dd, s->yy); //"02" 2 means two digits then 0 means zero in front if necessary.
-        mvwprintw(win, 4, 2, "Fever: ..................");
-        mvwprintw(win, 5, 2, "Sore throat: ............");
-        mvwprintw(win, 6, 2, "Cough: ..................");
-        mvwprintw(win, 7, 2, "Runny nose: .............");
-        mvwprintw(win, 8, 2, "Shortness of breathing: .");
-        mvwprintw(win, 9, 2, "Fatigue: ................");
-        mvwprintw(win, 10, 2, "Muscle pain / Joint pain:");
-        mvwprintw(win, 11, 2, "Chills: .................");
-        mvwprintw(win, 12, 2, "Vommit / Nausea: ........");
-        mvwprintw(win, 13, 2, "Diarrhea: ...............");
-        mvwprintw(win, 14, 2, "Other symptoms: .........");
+        mvwprintw(win, 0, 2, "Date: ................... %02d/%02d/%d", s->mm, s->dd, s->yy); //"02" 2 means two digits then 0 means zero in front if necessary.
+        mvwprintw(win, 1, 2, "Fever: ..................");
+        mvwprintw(win, 2, 2, "Sore throat: ............");
+        mvwprintw(win, 3, 2, "Cough: ..................");
+        mvwprintw(win, 4, 2, "Runny nose: .............");
+        mvwprintw(win, 5, 2, "Shortness of breathing: .");
+        mvwprintw(win, 6, 2, "Fatigue: ................");
+        mvwprintw(win, 7, 2, "Muscle pain / Joint pain:");
+        mvwprintw(win, 8, 2, "Chills: .................");
+        mvwprintw(win, 9, 2, "Vommit / Nausea: ........");
+        mvwprintw(win, 10, 2, "Diarrhea: ...............");
+        mvwprintw(win, 11, 2, "Other symptoms: .........");
         wrefresh(win);
-        s->fever = get_yes_no(win, 4, 28);
-        s->sore_throat = get_yes_no(win, 5, 28);
-        s->cough = get_yes_no(win, 6, 28);
-        s->nose = get_yes_no(win, 7, 28);
-        s->breath = get_yes_no(win, 8, 28);
-        s->fatigue = get_yes_no(win, 9, 28);
-        s->pain = get_yes_no(win, 10, 28);
-        s->chills = get_yes_no(win, 11, 28);
-        s->vomit = get_yes_no(win, 12, 28);
-        s->diarrhea = get_yes_no(win, 13, 28);
-        s->other = get_yes_no(win, 14, 28); // TODO make other symptoms a text field
+        s->fever = get_yes_no(win, 1, 28);
+        s->sore_throat = get_yes_no(win, 2, 28);
+        s->cough = get_yes_no(win, 3, 28);
+        s->nose = get_yes_no(win, 4, 28);
+        s->breath = get_yes_no(win, 5, 28);
+        s->fatigue = get_yes_no(win, 6, 28);
+        s->pain = get_yes_no(win, 7, 28);
+        s->chills = get_yes_no(win, 8, 28);
+        s->vomit = get_yes_no(win, 9, 28);
+        s->diarrhea = get_yes_no(win, 10, 28);
+        s->other = get_yes_no(win, 11, 28); // TODO make other symptoms a text field
         if (add_report(current_patient, s, true)) // Add report and check if something went wrong.
         {
             free(s);
@@ -225,33 +229,33 @@ void new_patient()
     u->yy = local_time->tm_year + 1900; // Get the year, where 0 actually means 1900.
     free(local_time);
     int width = COLS / 2;
-    int height = 15;
-    WINDOW *win = newwin(height, width, (LINES - height) / 2, (COLS - width) / 2);
+    int height = 13;
+    WINDOW *win = newwin(height, width, 11, (COLS - width) / 2);
     wclear(win);
-    mvwprintw(win, 2, 2, "Name: ");
-    mvwprintw(win, 3, 2, "Age: ");
-    mvwprintw(win, 4, 2, "Gender: ");
-    mvwprintw(win, 5, 2, "Nationality: ");
-    mvwprintw(win, 6, 2, "Contact #: ");
-    mvwprintw(win, 7, 2, "Date today:  %02d/%02d/%d", u->mm, u->dd, u->yy); //"02" 2 means two digits then 0 means zero in front if necessary.
-    mvwprintw(win, 8, 2, "Address: ");
-    mvwprintw(win, 9, 2, "Number of person in the household: ");
-    mvwprintw(win, 10, 2, "Other health conditions: ");
-    mvwprintw(win, 11, 2, "Do you have history of travel \n  -to other countries with COVID-19 (Yes/No): ");
-    mvwprintw(win, 13, 2, "Do you have history of exposure \n  -to a confirmed COVID-19 patient (Yes/No): ");
+    mvwprintw(win, 0, 2, "Name: ");
+    mvwprintw(win, 1, 2, "Age: ");
+    mvwprintw(win, 2, 2, "Gender: ");
+    mvwprintw(win, 3, 2, "Nationality: ");
+    mvwprintw(win, 4, 2, "Contact #: ");
+    mvwprintw(win, 5, 2, "Date today:  %02d/%02d/%d", u->mm, u->dd, u->yy); //"02" 2 means two digits then 0 means zero in front if necessary.
+    mvwprintw(win, 6, 2, "Address: ");
+    mvwprintw(win, 7, 2, "Number of person in the household: ");
+    mvwprintw(win, 8, 2, "Other health conditions: ");
+    mvwprintw(win, 9, 2, "Do you have history of travel \n  -to other countries with COVID-19 (Yes/No): ");
+    mvwprintw(win, 11, 2, "Do you have history of exposure \n  -to a confirmed COVID-19 patient (Yes/No): ");
     wrefresh(win);
     echo(); // Turn on echo so the user sees what they are typing.
     curs_set(1); // Show the cursor so the user sees where they are typing.
-    mvwscanw(win, 2, 15, "%50[^\n]", u->name);
-    mvwscanw(win, 3, 15, "%d", &u->age);
-    mvwscanw(win, 4, 15, "%20[^\n]", u->gender);
-    mvwscanw(win, 5, 15, "%50[^\n]", u->nationality); // TODO Let user choose from a list of nationalities.
-    mvwscanw(win, 6, 15, "%50[^\n]", &u->phone);
-    mvwscanw(win, 8, 15, "%255[^\n]", u->address);
-    mvwscanw(win, 9, 37, "%d", &u->h_num);
-    mvwscanw(win, 10, 32, "%50[^\n]", u->health_con);
-    u->travel = get_yes_no(win, 12, 46);
-    u->expo = get_yes_no(win, 14, 45);
+    mvwscanw(win, 0, 15, "%50[^\n]", u->name);
+    mvwscanw(win, 1, 15, "%d", &u->age);
+    mvwscanw(win, 2, 15, "%20[^\n]", u->gender);
+    mvwscanw(win, 3, 15, "%50[^\n]", u->nationality); // TODO Let user choose from a list of nationalities.
+    mvwscanw(win, 4, 15, "%50[^\n]", &u->phone);
+    mvwscanw(win, 5, 15, "%255[^\n]", u->address);
+    mvwscanw(win, 6, 37, "%d", &u->h_num);
+    mvwscanw(win, 7, 32, "%50[^\n]", u->health_con);
+    u->travel = get_yes_no(win, 10, 46);
+    u->expo = get_yes_no(win, 12, 45);
     curs_set(0); // Hide the cursor again.
     noecho(); // Don't show what the users types.
     if (add_user(u) == NULL) // Add user and check if something went wrong.

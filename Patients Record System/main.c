@@ -140,12 +140,13 @@ bool admin_login()
 
 void admin_screen()
 {
-    refresh();
-    headMessage("ADMIN SCREEN");
     const char *m[] = {"Patients", /*"Change Admin Details",*/  "Exit", NULL }; // The NULL pointer marks the end of the list.
     bool is_running = true;
     while (is_running)
     {
+        clear();
+        refresh();
+        headMessage("ADMIN SCREEN");
         switch (menu(m))
         {
         case 0:
@@ -155,7 +156,6 @@ void admin_screen()
 //            //TODO
 //            break;
         case 1:
-            refresh();
             return;
         }
     }
@@ -211,29 +211,29 @@ User *patient_login()
 
 void show_patients()
 {
-    refresh();
-    headMessage("PATIENTS");
-    move(10,0);
     int col = (COLS - 72) / 2;
     int page = 0;
     int records_per_page = (LINES - 2 - 13) / 3;
     User *selected_user = NULL; // Here we store the current selection or NULL if nothing is seletec.
     User *displayed_users[records_per_page]; // Here we remember which user is displayed at which position on the screen.
-    mvprintw(10, col + 3, "#");
-    mvprintw(10, col + 6, "Code");
-    mvprintw(10, col + 15, "Name");
-    mvprintw(10, col + 31, "Age");
-    mvprintw(10, col + 35, "Gender");
-    mvprintw(10, col + 42, "Nat");
-    mvprintw(10, col + 46, "Phone");
-    mvprintw(10, col + 64, "Started Date");
-    mvprintw(11, col + 6, "Address");
-    mvprintw(11, col + 31, "#HH");
-    mvprintw(11, col + 35, "Health condition");
-    mvprintw(11, col + 56, "Travel");
-    mvprintw(11, col + 64, "Exposure");
     while(true)
     {
+        clear();
+        headMessage("PATIENTS");
+        mvprintw(10, col + 3, "#");
+        mvprintw(10, col + 6, "Code");
+        mvprintw(10, col + 15, "Name");
+        mvprintw(10, col + 31, "Age");
+        mvprintw(10, col + 35, "Gender");
+        mvprintw(10, col + 42, "Nat");
+        mvprintw(10, col + 46, "Phone");
+        mvprintw(10, col + 64, "Started Date");
+        mvprintw(11, col + 6, "Address");
+        mvprintw(11, col + 31, "#HH");
+        mvprintw(11, col + 35, "Health condition");
+        mvprintw(11, col + 56, "Travel");
+        mvprintw(11, col + 64, "Exposure");
+        refresh();
         int line = 13; // Display always starts at line 12.
         move(line, 0);
         clrtobot();
@@ -327,7 +327,6 @@ void show_patients()
             {
                 display_reports(selected_user);
                 selected_user = NULL;
-                refresh();
             }
             else
             {
