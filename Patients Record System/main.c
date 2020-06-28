@@ -360,7 +360,7 @@ void display_reports(User *u)
              finish->tm_mday,
              finish->tm_year + 1900,
              u->mm, u->dd, u->yy);
-    mvprintw(13, 20, "|            |");
+    mvprintw(13, 20, "|             |");
     mvprintw(14, 0, "Report:             --------------");
     mvprintw(14, 60, "--------------");
     mvprintw(15, 0, "Fever:");
