@@ -251,9 +251,9 @@ void new_patient()
     mvwscanw(win, 2, 15, "%20[^\n]", u->gender);
     mvwscanw(win, 3, 15, "%50[^\n]", u->nationality); // TODO Let user choose from a list of nationalities.
     mvwscanw(win, 4, 15, "%50[^\n]", &u->phone);
-    mvwscanw(win, 5, 15, "%255[^\n]", u->address);
-    mvwscanw(win, 6, 37, "%d", &u->h_num);
-    mvwscanw(win, 7, 32, "%50[^\n]", u->health_con);
+    mvwscanw(win, 6, 15, "%255[^\n]", u->address);
+    mvwscanw(win, 7, 37, "%d", &u->h_num);
+    mvwscanw(win, 8, 32, "%50[^\n]", u->health_con);
     u->travel = get_yes_no(win, 10, 46);
     u->expo = get_yes_no(win, 12, 45);
     curs_set(0); // Hide the cursor again.
