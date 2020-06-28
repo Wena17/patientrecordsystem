@@ -11,6 +11,6 @@ void headMessage(const char *message);
 void popUpMessage(const char *pop_message, const char *pmsg);
 void PUM_screen(User *u);
 void new_patient();
-char show_edit_menu(const bool has_edit, const int records_per_page);
+char show_edit_menu(const int records_per_page);
 
 #endif // UI_H_INCLUDED

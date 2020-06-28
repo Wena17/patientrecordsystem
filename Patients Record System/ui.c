@@ -16,6 +16,7 @@ bool get_yes_no(WINDOW *win, int row, int col);
  */
 int menu(const char **items)
 {
+    refresh();
     /* Determine the length of the longest menu item. */
     int num_items = 0;
     int max_width = 0;
@@ -110,8 +111,35 @@ void popUpMessage(const char *pmsg, const char *pop_message)
     delwin(win);
 }
 
+char show_edit_menu(const int records_per_page)
+{
+    const int col = (COLS - 53) / 2;
+    char allowed[] = "vdepn0123456789";
+    allowed[6 + records_per_page] = '\0'; // Do not allow selections beyond the number of records per page.
+    mvprintw(LINES - 2, col, "(v) View");
+    mvprintw(LINES - 2, col + 22, "(p)revious");
+    mvprintw(LINES - 2, col + 36, "(n)ext");
+    mvprintw(LINES - 2, col + 46, "(0)back");
+    refresh();
+    cbreak();
+    noecho();
+    while (true)
+    {
+        char c = tolower(getch());
+        const char *s = allowed;
+        while (*s)
+        {
+            if (*s == c )
+                return c;
+            s++;
+        }
+    }
+}
+
 void PUM_screen(User *current_patient)
 {
+    clear();
+    refresh();
     headMessage("Person Under Monitoring");
     Report *s = malloc(sizeof(Report));
     char temp[256];
@@ -129,7 +157,7 @@ void PUM_screen(User *current_patient)
         popUpMessage("You have already completed", "your 14 day reporting period.");
     } else if (has_report(current_patient, s->day)) {
         free(s);
-        show_message("You have already reported today.");
+        popUpMessage("You have already reported today.", "Come back tomorrow");
     } else {
         int width = COLS / 2;
         int height = 15;
@@ -182,36 +210,6 @@ void PUM_screen(User *current_patient)
         }
     }
     return;
-}
-
-// TODO replace the yes/no questions with this function.
-bool get_yes_no(WINDOW *win, int row, int col) {
-    echo();
-    curs_set(1);
-    cbreak();
-    char input;
-    bool done = false;
-    bool result;
-    do {
-        wmove(win, row, col);
-        input = tolower(wgetch(win));
-        if (input == 'y') {
-            result = true;
-            done = true;
-        } else if (input == 'n') {
-            result = false;
-            done = true;
-        } else {
-            wmove(win, row, col);
-            wclrtoeol(win);
-            wrefresh(win);
-        }
-    } while (!done);
-    curs_set(0);
-    noecho();
-    nocbreak();
-    mvwprintw(win, row, col, result ? "Yes" : "No");
-    return result;
 }
 
 void new_patient()
@@ -269,29 +267,31 @@ void new_patient()
     return;
 }
 
-char show_edit_menu(const bool has_edit, const int records_per_page)
-{
-    const int col = (COLS - 53) / 2;
-    char allowed[] = "vdepn0123456789";
-    allowed[6 + records_per_page] = '\0'; // Do not allow selections beyond the number of records per page.
-    mvprintw(LINES - 2, col, "(v) View");
-    if (has_edit) mvprintw(LINES - 2, col + 8, "(e)dit");
-    mvprintw(LINES - 2, col + 16, "(d)elete");
-    mvprintw(LINES - 2, col + 26, "(p)revious");
-    mvprintw(LINES - 2, col + 38, "(n)ext");
-    mvprintw(LINES - 2, col + 46, "(0)back");
-    refresh();
+bool get_yes_no(WINDOW *win, int row, int col) {
+    echo();
+    curs_set(1);
     cbreak();
-    noecho();
-    while (true)
-    {
-        char c = tolower(getch());
-        const char *s = allowed;
-        while (*s)
-        {
-            if (*s == c && (has_edit || c != 'e'))
-                return c;
-            s++;
+    char input;
+    bool done = false;
+    bool result;
+    do {
+        wmove(win, row, col);
+        input = tolower(wgetch(win));
+        if (input == 'y') {
+            result = true;
+            done = true;
+        } else if (input == 'n') {
+            result = false;
+            done = true;
+        } else {
+            wmove(win, row, col);
+            wclrtoeol(win);
+            wrefresh(win);
         }
-    }
+    } while (!done);
+    curs_set(0);
+    noecho();
+    nocbreak();
+    mvwprintw(win, row, col, result ? "Yes" : "No");
+    return result;
 }

@@ -37,7 +37,6 @@ int main()
 void welcomeMessage()
 {
     headMessage("Welcome");
-    /* This can be optimized to use screen coordinates. */
     move(11, 0);
     printw("\n\t\t\t\t\t     °°                       °°");
     printw("\n\t\t\t\t\t    °  °                     °  °");
@@ -61,6 +60,7 @@ void welcomeMessage()
 }
 void homePage()
 {
+    refresh();
     headMessage("HOMEPAGE");
     const char *m[] = { "Admin", "New Patient", "Person Under Monitoring", "Exit", NULL }; // The NULL pointer marks the end of the list.
     bool is_running = true;
@@ -85,7 +85,10 @@ void homePage()
                 popUpMessage("NOTE: Just press n for NO", "and y for YES");
                 PUM_screen(u);
             }
-            // TODO warning if code was entered wrong and no patient was found.
+            else
+            {
+                show_message("Patient not found");
+            }
             break;
         case 3:
             exit(0);
@@ -95,6 +98,7 @@ void homePage()
 
 bool admin_login()
 {
+    refresh();
     headMessage("LOGIN");
     char pass[20];
     int width = COLS / 2;
@@ -136,8 +140,9 @@ bool admin_login()
 
 void admin_screen()
 {
+    refresh();
     headMessage("ADMIN SCREEN");
-    const char *m[] = {"Patients", "Change Admin Details",  "Exit", NULL }; // The NULL pointer marks the end of the list.
+    const char *m[] = {"Patients", /*"Change Admin Details",*/  "Exit", NULL }; // The NULL pointer marks the end of the list.
     bool is_running = true;
     while (is_running)
     {
@@ -146,10 +151,11 @@ void admin_screen()
         case 0:
             show_patients();
             break;
+//        case 1:
+//            //TODO
+//            break;
         case 1:
-            //TODO
-            break;
-        case 2:
+            refresh();
             return;
         }
     }
@@ -157,6 +163,8 @@ void admin_screen()
 
 User *patient_login()
 {
+    clear();
+    refresh();
     headMessage("PATIENT LOGIN");
     char code[20];
     int width = COLS / 2;
@@ -203,8 +211,9 @@ User *patient_login()
 
 void show_patients()
 {
-    clear();
+    refresh();
     headMessage("PATIENTS");
+    move(10,0);
     int col = (COLS - 72) / 2;
     int page = 0;
     int records_per_page = (LINES - 2 - 13) / 3;
@@ -274,7 +283,7 @@ void show_patients()
         }
         refresh();
         bool is_last_page = link == NULL;
-        char c = show_edit_menu(false, records_per_page);
+        char c = show_edit_menu(records_per_page);
         switch (c)
         {
         case '1':
@@ -313,24 +322,17 @@ void show_patients()
                 selected_user = NULL; // We've changed the page, so unselect.
             }
             break;
-        case 'd':
-            //TODO
-//            if (selected_user)
-//            {
-//                if (get_product_count(selected_user))
-//                {
-//                    show_message("You can't delete a seller with active products.");
-//                }
-//                else
-//                {
-//                    delete_user(selected_user);
-//                    selected_user = NULL;
-//                }
-//            }
-            break;
         case 'v':
-            // TODO hide view function when now user is selected.
-            if (selected_user) display_reports(selected_user);
+            if (selected_user)
+            {
+                display_reports(selected_user);
+                selected_user = NULL;
+                refresh();
+            }
+            else
+            {
+                show_message("No patient selected");
+            }
             break;
         default:
             show_message("Invalid selection.");
@@ -339,10 +341,12 @@ void show_patients()
     }
 }
 
-void display_reports(User *u) {
+void display_reports(User *u)
+{
     clear();
+    refresh();
     headMessage("Reports");
-    mvprintw(12, 0, "Patient name:        %s", u->name);
+    mvprintw(11, 0, "Patient name:        %s", u->name);
     struct tm start;
     start.tm_mday = u->dd;
     start.tm_mon = u->mm - 1;
@@ -352,7 +356,6 @@ void display_reports(User *u) {
     start.tm_sec = 0;
     time_t fin = mktime(&start) + 13 * 24 * 3600;
     struct tm *finish = localtime(&fin);
-    // TODO calculate finish date
     mvprintw(12, 0, "Day:                %02d/%02d/%02d   %02d/%02d/%02d",
              finish->tm_mon + 1,
              finish->tm_mday,
@@ -373,7 +376,8 @@ void display_reports(User *u) {
     mvprintw(19, 40, "Diarrhea:");
     mvprintw(20, 40, "Other symptoms:");
     LinkedList *link = u->reports;  // This is a stack.
-    while (link) {
+    while (link)
+    {
         Report *report = (Report *) link->elem;
         int col = 34 - get_day_number(report);
         mvprintw(14, col, "Y");
@@ -391,8 +395,9 @@ void display_reports(User *u) {
         mvprintw(20, col + 40, report->other ? "Y" : "-");
         link = link->next;
     }
-    refresh();
     show_message("Press key to return");
-    clear();
+    move(11,0);
+    clrtobot();
     refresh();
+    return;
 }

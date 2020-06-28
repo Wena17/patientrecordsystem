@@ -70,7 +70,6 @@ int load_users()
 }
 
 /* Save all users in the file and return 0 if everything worked, -1 if we couldn't open the file, and -2 if something else went wrong. */
-// TODO Do a save and rename.
 int save_users()
 {
     FILE *f = fopen(FILENAME, "w+");

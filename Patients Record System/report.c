@@ -71,7 +71,6 @@ int save_reports()
     return 0;
 }
 
-//TODO
 int load_reports()
 {
     FILE *f = fopen(FILENAME, "r");
